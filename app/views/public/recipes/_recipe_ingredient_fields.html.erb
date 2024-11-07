@@ -1,0 +1,21 @@
+<div class="nested-fields mb-2">
+  <div class="d-flex align-items-center">
+    <div class="mr-2" style="color: #999;">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    <div class="flex-grow-1 d-flex gap-2">
+      <%= f.text_field :ingredient, 
+          class: "form-control ml-1",
+          placeholder: "例：卵",
+          style: "background-color: #FFF7E6;" %>
+      
+      <%= f.text_field :quantity, 
+          class: "form-control mx-2",
+          placeholder: "例：2個",
+          style: "background-color: #FFF7E6;" %>
+    </div>
+    <%= link_to_remove_association f, class: "btn", style: "color: #999;" do %>
+      <i class="fa-solid fa-trash-can"></i>
+    <% end %>
+  </div>
+</div>

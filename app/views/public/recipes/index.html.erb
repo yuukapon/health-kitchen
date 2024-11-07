@@ -1,0 +1,35 @@
+<div class="container py-5">
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-8 col-md-10">
+      <h1 class="text-center mb-4">レシピ</h1>
+      
+      <!-- 検索フォーム -->
+      <div class="card shadow-sm mb-5">
+        <div class="card-body p-4">
+          <%= search_form_for @q, url: recipes_path, method: :get do |f| %>
+            <div class="input-group">
+              <%= f.search_field :title_or_description_or_user_name_or_recipe_ingredients_ingredient_or_genres_name_cont,
+                placeholder: '料理名・材料・ジャンル など',
+                class: 'form-control' %>
+              <div class="input-group-append">
+                <%= button_tag type: 'submit', class: 'btn border px-4' do %>
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- レシピ一覧 -->
+      <div class="recipe-list">
+        <%= render 'recipe_cards', recipes: @recipes %>
+      </div>
+      
+      <!-- ページネーション -->
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @recipes, class: 'pagination' %>
+      </div>
+    </div>
+  </div>
+</div>

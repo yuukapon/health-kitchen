@@ -1,0 +1,97 @@
+<div class="container py-4">
+  <h1 class="text-center mb-4">ユーザー一覧</h1>
+  
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <% if @users.any? %>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th class="text-center col-1">ID</th>
+                    <th class="col-2">プロフィール</th>
+                    <th class="col-3">ユーザー名</th>
+                    <th class="col-3">メールアドレス</th>
+                    <th class="text-center col-1">投稿数</th>
+                    <th class="text-center col-1">ステータス</th>
+                    <th class="text-center col-1">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @users.each do |user| %>
+                    <tr>
+                      <td class="text-center"><%= user.id %></td>
+                      
+                      <td class="text-center">
+                        <%= image_tag user.get_profile_image(80,80), 
+                            class: "rounded-circle img-fluid w-50",
+                            alt: "#{user.name}のプロフィール画像" %>
+                      </td>
+                      
+                      <td>
+                        <%= link_to admin_user_path(user), class: "text-decoration-none" do %>
+                          <div class="fw-bold text-dark"><%= user.name %></div>
+                        <% end %>
+                        <small class="text-muted">
+                          <%= user.created_at.strftime('%Y/%m/%d') %>
+                        </small>
+                      </td>
+                      
+                      <td class="text-break">
+                        <i class="fas fa-envelope me-1 text-muted"></i>
+                        <%= user.email %>
+                      </td>
+                      
+                      <td class="text-center">
+                        <span class="badge rounded-pill bg-light text-dark border">
+                          <i class="fas fa-pencil-alt me-1"></i>
+                          <%= user.recipes.count %>
+                        </span>
+                      </td>
+                      
+                      <td class="text-center">
+                        <% if user.is_active %>
+                          <span class="badge rounded-pill bg-success-subtle text-success">
+                            <i class="fas fa-check-circle me-1"></i>有効
+                          </span>
+                        <% else %>
+                          <span class="badge rounded-pill bg-secondary-subtle text-secondary">
+                            <i class="fas fa-ban me-1"></i>退会
+                          </span>
+                        <% end %>
+                      </td>
+                      
+                      <td class="text-center">
+                        <% if user.is_active %>
+                          <%= button_to admin_user_path(user),
+                              method: :patch,
+                              data: { 
+                                confirm: "#{user.name}さんを退会させますか？",
+                                "turbo-method": :patch 
+                              },
+                              class: "btn btn-outline-danger btn-sm" do %>
+                            <i class="fas fa-user-slash me-1"></i>退会
+                          <% end %>
+                        <% else %>
+                          <span class="badge bg-secondary">退会済み</span>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <p class="text-center text-muted my-4">ユーザーが存在しません</p>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @users %>
+      </div>
+    </div>
+  </div>
+</div>

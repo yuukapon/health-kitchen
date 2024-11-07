@@ -1,0 +1,41 @@
+<div class="container">
+ <div class="row justify-content-center mt-5">
+   <div class="col-md-8">
+     <h2 class="text-center mb-4">パスワードの再設定</h2>
+     
+     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+       <%= render "devise/shared/error_messages", resource: resource %>
+       
+       <div class="mb-4">
+         <div class="d-flex align-items-center mb-2">
+           <span class="badge text-white me-2" style="background-color: #ED7D31;">必須</span>
+           <%= f.label :email, "メールアドレス", class: "form-label fw-bold mb-0" %>
+         </div>
+         <%= f.email_field :email, 
+             class: "form-control",
+             style: "background-color: #FFFFE0;", placeholder: "例：sample@example.com",
+             autofocus: true, autocomplete: "email" %>
+         <small class="text-muted mt-2 d-block">
+           ご登録のメールアドレスに再設定用のメールをお送りします。
+         </small>
+       </div>
+       
+       <div class="text-center mt-5">
+         <%= f.submit "再設定メールを送信", 
+             class: "btn btn-lg px-4 py-2 text-white col-3 col-md-4", 
+             style: "background-color: #ED7D31;" %>
+       </div>
+     <% end %>
+     
+     <div class="text-center mt-4">
+       <p>
+         <%= link_to "ログインページに戻る", new_session_path(resource_name) %>
+       </p>
+       <p>
+         アカウントをお持ちでない方は
+         <%= link_to "新規登録", new_registration_path(resource_name) %>
+       </p>
+     </div>
+   </div>
+ </div>
+</div>

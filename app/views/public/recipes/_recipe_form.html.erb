@@ -1,0 +1,161 @@
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <!-- タイトル -->
+      <h2 class="text-center mb-5"><%= title %></h2>
+      
+      <%= form_with model: recipe, local: true do |f| %> 
+        <!-- 投稿者情報 -->
+        <div class="d-flex align-items-center mb-3">
+          <%= image_tag current_user.get_profile_image(50,50), class: "rounded-circle mr-3" %>
+          <span class="fw-bold"><%= current_user.name %></span>
+        </div>
+
+        <!-- メインの料理写真 -->
+        <div class="mb-4">
+          <div class="form-group">
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge mr-2 text-white" style="background-color: #ED7D31;">必須</span>
+              <label class="mb-0">メインの料理写真</label>
+            </div>
+            <div class="input-group">
+              <%= f.file_field :image, 
+                  accept: "image/*", 
+                  class: "form-control",
+                  style: "background-color: #FFF7E6;" %>
+              <label class="input-group-text">
+                <i class="fa-solid fa-camera"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- レシピのタイトル -->
+        <div class="mb-4">
+          <div class="form-group">
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge mr-2 text-white" style="background-color: #ED7D31;">必須</span>
+              <label class="mb-0">レシピのタイトル</label>
+            </div>
+            <%= f.text_field :title, 
+                class: "form-control", 
+                placeholder: "例：簡単ヘルシーオムライス！",
+                style: "background-color: #FFF7E6;" %>
+          </div>
+        </div>
+
+        <!-- 調理時間 -->
+        <div class="mb-4">
+          <div class="form-group">
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge mr-2 text-white" style="background-color: #ED7D31;">必須</span>
+              <label class="mb-0">調理時間</label>
+            </div>
+            <%= f.select :cook_time, 
+                Recipe.cook_times.keys.map { |k| [k.humanize, k] },
+                { prompt: "5分以内" }, 
+                { class: "form-select w-auto",
+                  style: "background-color: #FFF7E6;" } %>
+          </div>
+        </div>
+
+        <!-- レシピの説明 -->
+        <div class="mb-4">
+          <div class="form-group">
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge mr-2 text-white" style="background-color: #5B9BD5;">任意</span>
+              <label class="mb-0">レシピの説明</label>
+            </div>
+            <%= f.text_area :description, 
+                class: "form-control", 
+                rows: 5,
+                placeholder: "・作り方のコツ\n・おすすめポイント\n・その他",
+                style: "background-color: #FFF7E6;" %>
+          </div>
+        </div>
+
+        <!-- 材料部分 -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center mb-2">
+            <span class="badge mr-2 text-white" style="background-color: #ED7D31;">必須</span>
+            <h5 class="mb-0">材料</h5>
+          </div>
+          
+          <!-- 人数指定 -->
+          <div class="mb-3 d-flex align-items-center">
+            <div class="w-25">
+              <%= f.number_field :people_count, 
+                  class: "form-control",
+                  placeholder: "例：2",
+                  style: "background-color: #FFF7E6;" %>
+            </div>
+            <span class="ml-2">人分</span>
+          </div>
+        
+          <!-- 材料リスト -->
+          <div class="ingredients-wrapper">
+            <div id="recipe-ingredients">
+              <%= f.fields_for :recipe_ingredients do |t| %>
+                <%= render "public/recipes/recipe_ingredient_fields", f: t %>
+              <% end %>
+            </div>
+            <%= link_to_add_association "＋ 材料追加", f, :recipe_ingredients, 
+                'data-association-insertion-node' => '#recipe-ingredients',
+                'data-association-insertion-method' => 'append',
+                class: "btn mt-2",
+                style: "color: #806000; border: 1px solid #806000;" %>
+          </div>
+        </div>
+        
+        <!-- 作り方部分 -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center mb-2">
+            <span class="badge mr-2 text-white" style="background-color: #ED7D31;">必須</span>
+            <h5 class="mb-0">作り方</h5>
+          </div>
+          
+          <div class="steps-wrapper">
+            <div id="recipe-steps">
+              <%= f.fields_for :recipe_steps do |t| %>
+                <%= render "public/recipes/recipe_step_fields", f: t %>
+              <% end %>
+            </div>
+            <%= link_to_add_association "＋ 作り方追加", f, :recipe_steps,
+                'data-association-insertion-node' => '#recipe-steps',
+                'data-association-insertion-method' => 'append',
+                class: "btn mt-2",
+                style: "color: #806000; border: 1px solid #806000;" %>
+          </div>
+        </div>
+        
+        <!-- ジャンル部分 -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center mb-2">
+            <span class="badge mr-2 text-white" style="background-color: #ED7D31;">必須</span>
+            <h5 class="mb-0">ジャンル</h5>
+          </div>
+          
+          <div class="genres-wrapper">
+            <div id="recipe-genres">
+              <%= f.fields_for :recipe_genres do |genre_form| %> 
+                <%= render "public/recipes/recipe_genre", f: genre_form %>  
+              <% end %>
+            </div>
+            <%= link_to_add_association "＋ ジャンル追加", f, :recipe_genres,
+                'data-association-insertion-node' => '#recipe-genres',
+                'data-association-insertion-method' => 'append',
+                partial: 'public/recipes/recipe_genre',
+                class: "btn mt-2",
+                style: "color: #806000; border: 1px solid #806000;" %>
+          </div>
+        </div>
+
+        <!-- 送信ボタン -->
+        <div class="text-center mt-5">
+          <%= f.submit submit_text, class: "btn btn-lg text-white px-4 py-2 mb-3 col-md-4",
+              style: "background-color: #ED7D31;" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

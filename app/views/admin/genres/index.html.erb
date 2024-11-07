@@ -1,0 +1,86 @@
+    <!-- エラーメッセージ -->
+    <% if @genre.errors.any? %>
+        <div class="alert alert-danger mx-0 mb-4"> 
+          <h6 class="alert-heading fw-bold mb-2">
+            <%= @genre.errors.count %>件のエラーが発生しました
+          </h6>
+          <div class="ms-0">
+            <% @genre.errors.full_messages.each do |message| %>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+                <span><%= message %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+    <% end %>
+    
+    <div class="container py-4">
+
+  <h1 class="text-center mb-4">ジャンル一覧・追加</h1>
+
+  <%# ジャンル追加フォーム %>
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-6">
+      <%= form_with(model: @genre, url: admin_genres_path, class: 'form-group') do |f| %>
+        <div class="mb-3">
+          <%= f.label :name, "ジャンル名", class: 'form-label fw-bold' %>
+          <div class="input-group">
+            <%= f.text_field :name, 
+                class: 'form-control', 
+                placeholder: 'ジャンル名を入力してください',
+                "aria-label": "ジャンル名" %>
+            <div class="input-group-append">
+              <%= f.submit "登録", class: 'btn text-white', style: "background-color: #ED7D31;" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ジャンル一覧テーブル %>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <% if @genres.any? %>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th class="col-8">ジャンル名</th>
+                <th class="col-1"></th>
+                <th class="col-1"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @genres.each do |genre| %>
+                <tr>
+                  <td class="align-middle"><%= genre.name %></td>
+                  <td class="text-center">
+                    <%= link_to edit_admin_genre_path(genre), 
+                        class: 'btn btn-outline-success btn-sm' do %>
+                      <i class="fas fa-edit me-1"></i>編集
+                    <% end %>
+                  </td>
+              <td class="text-center">
+                <%= link_to admin_genre_path(genre), 
+                    method: :delete,
+                    data: { 
+                      confirm: "#{genre.name}を削除してもよろしいですか？" 
+                    },
+                    class: 'btn btn-outline-danger btn-sm' do %>
+                  <i class="fas fa-trash-alt me-1"></i>削除
+                <% end %>
+              </td>
+
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-center text-muted">ジャンルが登録されていません</p>
+      <% end %>
+    </div>
+  </div>
+</div>

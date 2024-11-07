@@ -1,0 +1,15 @@
+<div class="nested-fields mb-2">
+  <div class="d-flex align-items-center">
+    <div class="mr-2" style="color: #999;">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    <div class="flex-grow-1">
+      <%= f.collection_select :genre_id, Genre.all, :id, :name, 
+          { prompt: "ジャンルを選択してください" }, 
+          { class: 'form-control', style: "background-color: #FFF7E6;" } %>
+    </div>
+    <%= link_to_remove_association f, class: "btn ml-2", style: "color: #999;" do %>
+      <i class="fa-solid fa-trash-can"></i>
+    <% end %>
+  </div>
+</div>

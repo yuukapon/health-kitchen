@@ -1,0 +1,26 @@
+<div class="nested-fields mb-2">
+  <div class="d-flex align-items-center">
+    <div class="mr-1">
+      <i class="fa-solid fa-bars" style="color: #999;"></i>
+    </div>
+    <div class="flex-grow-1 row mx-1"> <!-- Rails 6のBootstrapに合わせて調整 -->
+      <div class="col-8">
+        <%= f.text_area :description, 
+            class: "form-control",
+            placeholder: "例：トマトはざく切り、玉ねぎは5㎜角ほどに切り、鶏むね肉は一口サイズに切る。",
+            rows: 3,
+            style: "background-color: #FFF7E6;" %>
+      </div>
+      
+      <div class="col-4">
+        <%= f.file_field :step_image, 
+            accept: "image/*",
+            class: "form-control",
+            style: "background-color: #FFF7E6;" %>
+      </div>
+    </div>
+    <%= link_to_remove_association f, class: "btn", style: "color: #999;" do %>
+      <i class="fa-solid fa-trash-can"></i>
+    <% end %>
+  </div>
+</div>

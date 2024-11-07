@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+      <h2 class="text-center mb-4"><%= title %></h2>
+      
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="mb-4">
+          <span class="badge text-white me-2" style="background-color: #ED7D31;">必須</span>
+          <%= f.label :email, "メールアドレス", class: "form-label fw-bold" %>
+          <%= f.email_field :email, autofocus: true, 
+              class: "form-control",
+              style: "background-color: #FFFFE0;", 
+              placeholder: "例：sample@example.com", 
+              autocomplete: "email" %>
+        </div>
+
+        <div class="mb-4">
+          <span class="badge text-white me-2" style="background-color: #ED7D31;">必須</span>
+          <%= f.label :password, "パスワード", class: "form-label fw-bold" %>
+          <%= f.password_field :password, 
+              class: "form-control",
+              style: "background-color: #FFFFE0;", 
+              placeholder: "パスワードを入力してください", 
+              autocomplete: "current-password" %>
+        </div>
+
+        <div class="text-center mt-5">
+          <%= f.submit "ログイン", class: "btn px-4 py-2", 
+              style: "background-color: #ED7D31; color: white;" %>
+        </div>
+      <% end %>
+
+      <% if show_user_links %>
+        <div class="text-center mt-4">
+          <p>
+            まだ会員登録がお済みでない方は
+            <%= link_to "こちら", new_registration_path(resource_name) %>
+            から新規登録を行ってください。
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

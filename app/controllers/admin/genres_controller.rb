@@ -28,8 +28,7 @@ class Admin::GenresController < ApplicationController
   
   def destroy
     @genre.destroy
-    flash[:success] = "ジャンルを削除しました。"
-    redirect_to admin_genres_path    # 一覧表のパス
+    redirect_to admin_genres_path, notice: "ジャンルを削除しました。"    
   end
 
   private

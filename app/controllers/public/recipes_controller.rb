@@ -16,7 +16,12 @@ class Public::RecipesController < ApplicationController
       flash[:success] = "レシピを投稿しました。"
       redirect_to recipe_path(@recipe)
     else
-      flash.now[:error] = "レシピの投稿に失敗しました。"
+      # エラー時にフォームに必要な関連オブジェクトを再構築
+      @recipe.recipe_ingredients.build if @recipe.recipe_ingredients.empty?
+      @recipe.recipe_steps.build if @recipe.recipe_steps.empty?
+      @recipe.recipe_genres.build if @recipe.recipe_genres.empty?
+      
+      flash.now[:error] = "入力内容に誤りがあります。"
       render :new, status: :unprocessable_entity
     end
   end

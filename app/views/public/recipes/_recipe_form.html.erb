@@ -1,4 +1,17 @@
-<div class="container my-4">
+<div class="container mt-4">
+  <% if @recipe.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading mb-3">
+        <i class="fa-solid fa-exclamation-circle me-2"></i>
+        <%= @recipe.errors.count %>件のエラーが発生しました
+      </h5>
+      <ul class="mb-0 ps-4">
+        <% @recipe.errors.full_messages.each do |message| %>
+          <li class="mb-1"><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <div class="row justify-content-center">
     <div class="col-md-8">
       <!-- タイトル -->

@@ -94,6 +94,24 @@
         </div>
       </div>
     <% end %>
+    <% if flash[:success] %>
+      <div class="alert alert-success alert-dismissible fade show mb-0">
+        <div class="container">
+          <%= flash[:success] %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    <% end %>
+    <% if flash[:error] %>
+    <div class="alert alert-danger alert-dismissible fade show mb-0">
+      <div class="container">
+        <%= flash[:error] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    <% end %>
+    
+    
     
     <main class="flex-grow-1"> 
       <%= yield %>

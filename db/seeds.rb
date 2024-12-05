@@ -1,7 +1,171 @@
 # This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+puts "seedの実行を開始"
+
+# 管理者の作成
+puts "管理者の作成中..."
+Admin.find_or_create_by!(email: 'admin@example.com') do |admin|
+ admin.password = 'password'
+ admin.password_confirmation = 'password'
+end
+
+# ジャンルの作成
+puts "ジャンルの作成中..."
+genres = [
+ "主菜",
+ "副菜", 
+ "和食",
+ "洋食",
+ "中華料理",
+ "韓国料理",
+ "東南アジア系料理",
+ "イタリア料理",
+ "フランス料理",
+ "メキシコ料理",
+ "インド料理",
+ "ベジタリアン",
+ "デザート",
+ "その他"
+]
+
+genre_records = genres.map do |genre_name|
+ Genre.find_or_create_by!(name: genre_name)
+end
+
+# ユーザーの作成
+puts "ユーザーの作成中..."
+tanaka = User.find_or_create_by!(email: "tanaka@example.com") do |user|
+ user.name = "たなか"
+ user.password = "password"
+ user.profile_image = ActiveStorage::Blob.create_and_upload!(
+   io: File.open("#{Rails.root}/db/fixtures/sample-user1.png"),
+   filename: "sample-user1.png"
+ )
+end
+
+ishida = User.find_or_create_by!(email: "ishida@example.com") do |user|
+ user.name = "いしだ"
+ user.password = "password"
+ user.profile_image = ActiveStorage::Blob.create_and_upload!(
+   io: File.open("#{Rails.root}/db/fixtures/sample-user2.png"),
+   filename: "sample-user2.png"
+ )
+end
+
+inaba = User.find_or_create_by!(email: "inaba@example.com") do |user|
+ user.name = "いなば"
+ user.password = "password"
+ user.profile_image = ActiveStorage::Blob.create_and_upload!(
+   io: File.open("#{Rails.root}/db/fixtures/sample-user3.png"),
+   filename: "sample-user3.png"
+ )
+end
+
+# レシピの作成
+puts "レシピの作成中..."
+
+# ----------- 水炊き -----------
+mizutaki = Recipe.find_or_create_by!(title: "おいしいのにヘルシー！水炊き") do |recipe|
+ recipe.image = ActiveStorage::Blob.create_and_upload!(
+   io: File.open("#{Rails.root}/db/fixtures/sample-post1.png"),
+   filename: "sample-post1.png"
+ )
+ recipe.description = "四の五の言わずに食べてみて！"
+ recipe.user = tanaka
+ recipe.cook_time = "約30分"
+ recipe.people_count = 4
+ recipe.is_active = true
+ recipe.genres = [
+   Genre.find_by(name: "主菜"),
+   Genre.find_by(name: "和食")
+ ]
+end
+
+# 水炊きの材料
+RecipeIngredient.create!([
+ { recipe: mizutaki, ingredient: "鶏もも肉", quantity: "400g" },
+ { recipe: mizutaki, ingredient: "白菜", quantity: "1/2個" },
+ { recipe: mizutaki, ingredient: "しめじ", quantity: "1パック" },
+ { recipe: mizutaki, ingredient: "昆布", quantity: "10cm" },
+ { recipe: mizutaki, ingredient: "ポン酢", quantity: "適量" }
+])
+
+# 水炊きの手順
+RecipeStep.create!([
+ { recipe: mizutaki, description: "鍋に水と昆布を入れて強火にかける" },
+ { recipe: mizutaki, description: "沸騰したら鶏肉を入れて中火で煮る" },
+ { recipe: mizutaki, description: "野菜としめじを入れて火が通るまで煮る" },
+ { recipe: mizutaki, description: "好みでポン酢をつけて食べる" }
+])
+
+# ----------- オムライス -----------
+omurice = Recipe.find_or_create_by!(title: "材料5つ！デミグラスオムライス") do |recipe|
+ recipe.image = ActiveStorage::Blob.create_and_upload!(
+   io: File.open("#{Rails.root}/db/fixtures/sample-post2.png"),
+   filename: "sample-post2.png"
+ )
+ recipe.description = "なんと材料５つでできちゃいます！"
+ recipe.user = ishida
+ recipe.cook_time = "約15分"
+ recipe.people_count = 2
+ recipe.is_active = true
+ recipe.genres = [
+   Genre.find_by(name: "主菜"),
+   Genre.find_by(name: "洋食")
+ ]
+end
+
+# オムライスの材料
+RecipeIngredient.create!([
+ { recipe: omurice, ingredient: "卵", quantity: "4個" },
+ { recipe: omurice, ingredient: "ご飯", quantity: "茶碗2杯分" },
+ { recipe: omurice, ingredient: "デミグラスソース", quantity: "200g" },
+ { recipe: omurice, ingredient: "バター", quantity: "20g" },
+ { recipe: omurice, ingredient: "塩こしょう", quantity: "適量" }
+])
+
+# オムライスの手順
+RecipeStep.create!([
+ { recipe: omurice, description: "フライパンでバターを溶かし、ご飯を炒める" },
+ { recipe: omurice, description: "卵を溶いて塩こしょうで味付けする" },
+ { recipe: omurice, description: "別のフライパンで薄焼き卵を作る" },
+ { recipe: omurice, description: "炒めたご飯を卵で包む" },
+ { recipe: omurice, description: "デミグラスソースをかける" }
+])
+
+# ----------- 大学芋 -----------
+candiedsweetpotatoes = Recipe.find_or_create_by!(title: "揚げない！ヘルシー大学芋") do |recipe|
+ recipe.image = ActiveStorage::Blob.create_and_upload!(
+   io: File.open("#{Rails.root}/db/fixtures/sample-post3.png"),
+   filename: "sample-post3.png"
+ )
+ recipe.description = "油で揚げずに作る、ヘルシーな大学芋のレシピです。お手軽なのに本格的な味わいが楽しめます！"
+ recipe.user = inaba
+ recipe.cook_time = "約15分"
+ recipe.people_count = 2
+ recipe.is_active = true
+ recipe.genres = [
+   Genre.find_by(name: "デザート"),
+   Genre.find_by(name: "和食")
+ ]
+end
+
+# 大学芋の材料
+RecipeIngredient.create!([
+ { recipe: candiedsweetpotatoes, ingredient: "さつまいも", quantity: "250g" },
+ { recipe: candiedsweetpotatoes, ingredient: "水 (さらす用)", quantity: "適量" },
+ { recipe: candiedsweetpotatoes, ingredient: "(A)砂糖", quantity: "大さじ1" },
+ { recipe: candiedsweetpotatoes, ingredient: "(A)みりん", quantity: "大さじ1" },
+ { recipe: candiedsweetpotatoes, ingredient: "(A)しょうゆ", quantity: "大さじ1/2" },
+ { recipe: candiedsweetpotatoes, ingredient: "(A)黒いりごま", quantity: "大さじ1/2" },
+ { recipe: candiedsweetpotatoes, ingredient: "サラダ油", quantity: "大さじ1" }
+])
+
+# 大学芋の手順
+RecipeStep.create!([
+ { recipe: candiedsweetpotatoes, description: "さつまいもは皮つきのまま1cm幅の輪切りにして、さらに1cm幅に切る" },
+ { recipe: candiedsweetpotatoes, description: "水に10分ほどさらし、キッチンペーパーで水気を拭き取る" },
+ { recipe: candiedsweetpotatoes, description: "中火で熱したフライパンにサラダ油をひき、2を入れて火が通り、カリッとするまで炒める" },
+ { recipe: candiedsweetpotatoes, description: "中火のまま(A)を加え、全体に味をなじませたら火から下ろし、お皿に盛り付けて完成" }
+])
+
+puts "seedの実行が完了しました"

@@ -11,4 +11,6 @@ class RecipeStep < ApplicationRecord
     end
     step_image.variant(resize_to_limit: [width, height]).processed
   end
+  
+  
 end

@@ -35,6 +35,11 @@
             <ul class="navbar-nav ms-auto align-items-center"> 
               <% if user_signed_in? %>
                 <li class="nav-item">
+                  <%= link_to about_path, class: 'nav-link hover-grow', style: 'color: #7F6000;' do %>
+                    <i class="fa-solid fa-info-circle me-1"></i> ヘルスキッチンとは？
+                  <% end %>
+                </li>
+                <li class="nav-item">
                   <%= link_to recipes_path, class: 'nav-link hover-grow', style: 'color: #7F6000;' do %>
                     <i class="fa-solid fa-book-open me-1"></i> レシピ
                   <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_03_110406) do
+ActiveRecord::Schema.define(version: 2024_12_08_081321) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -78,7 +78,9 @@ ActiveRecord::Schema.define(version: 2024_12_03_110406) do
     t.integer "genre_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position"
     t.index ["genre_id"], name: "index_recipe_genres_on_genre_id"
+    t.index ["position"], name: "index_recipe_genres_on_position"
     t.index ["recipe_id", "genre_id"], name: "index_recipe_genres_on_recipe_id_and_genre_id", unique: true
     t.index ["recipe_id"], name: "index_recipe_genres_on_recipe_id"
   end
@@ -89,6 +91,8 @@ ActiveRecord::Schema.define(version: 2024_12_03_110406) do
     t.string "quantity", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position"
+    t.index ["position"], name: "index_recipe_ingredients_on_position"
   end
 
   create_table "recipe_steps", force: :cascade do |t|
@@ -96,6 +100,8 @@ ActiveRecord::Schema.define(version: 2024_12_03_110406) do
     t.text "description", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position"
+    t.index ["position"], name: "index_recipe_steps_on_position"
     t.index ["recipe_id"], name: "index_recipe_steps_on_recipe_id_and_step_number"
   end
 

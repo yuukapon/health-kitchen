@@ -107,7 +107,7 @@
         
           <!-- 材料リスト -->
           <div class="ingredients-wrapper">
-            <div id="recipe-ingredients">
+            <div id="recipe-ingredients" class="sortable-list">
               <%= f.fields_for :recipe_ingredients do |t| %>
                 <%= render "public/recipes/recipe_ingredient_fields", f: t %>
               <% end %>
@@ -121,6 +121,7 @@
         </div>
         
         <!-- 作り方部分 -->
+        
         <div class="mb-4">
           <div class="d-flex align-items-center mb-2">
             <span class="badge mr-2 text-white" style="background-color: #ED7D31;">必須</span>
@@ -128,7 +129,7 @@
           </div>
           
           <div class="steps-wrapper">
-            <div id="recipe-steps">
+            <div id="recipe-steps" class="sortable-list">
               <%= f.fields_for :recipe_steps do |t| %>
                 <%= render "public/recipes/recipe_step_fields", f: t %>
               <% end %>
@@ -149,7 +150,7 @@
           </div>
           
           <div class="genres-wrapper">
-            <div id="recipe-genres">
+            <div id="recipe-genres" class="sortable-list"> 
               <%= f.fields_for :recipe_genres do |genre_form| %> 
                 <%= render "public/recipes/recipe_genre", f: genre_form %>  
               <% end %>

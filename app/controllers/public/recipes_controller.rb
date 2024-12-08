@@ -58,6 +58,32 @@ class Public::RecipesController < ApplicationController
     flash[:success] = "レシピを削除しました。"
     redirect_to recipes_path
   end
+  
+class Public::RecipesController < ApplicationController
+  def sort_ingredients
+    @recipe = Recipe.find(params[:id])
+    @recipe.recipe_ingredients.each do |ingredient|
+      ingredient.update(position: params[:ingredient_positions].index(ingredient.id.to_s) + 1)
+    end
+    head :ok
+  end
+
+  def sort_steps
+    @recipe = Recipe.find(params[:id])
+    @recipe.recipe_steps.each do |step|
+      step.update(position: params[:step_positions].index(step.id.to_s) + 1)
+    end
+    head :ok
+  end
+
+  def sort_genres
+    @recipe = Recipe.find(params[:id])
+    @recipe.recipe_genres.each do |genre|
+      genre.update(position: params[:genre_positions].index(genre.id.to_s) + 1)
+    end
+    head :ok
+  end
+end
 
   private
 

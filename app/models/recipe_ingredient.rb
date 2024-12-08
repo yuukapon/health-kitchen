@@ -1,5 +1,6 @@
 class RecipeIngredient < ApplicationRecord
   belongs_to :recipe
+  acts_as_list scope: :recipe
   
   validates :ingredient, presence: true
   validates :quantity, presence: true

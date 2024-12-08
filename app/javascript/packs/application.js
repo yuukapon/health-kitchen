@@ -24,3 +24,5 @@ ActiveStorage.start()
 // import "@hotwired/stimulus"
 // import "../controllers"
 
+// スライダー機能用
+import './sortable'

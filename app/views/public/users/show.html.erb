@@ -35,17 +35,25 @@
                 </div>
               </div>
             </div>
-            
-            <!-- 右側：編集ボタン（ログインユーザーのみ表示） -->
-            <% if @user == current_user %>
+                      
+          <!-- 右側：編集・退会ボタン（ログインユーザーのみ表示） -->
+          <% if @user == current_user %>
+            <div class="d-flex flex-column gap-2">
               <%= link_to edit_user_path(@user), 
                   class: "btn px-4 py-2 text-white", 
                   style: "background-color: #ED7D31;" do %>
                 <i class="fa-solid fa-pen-to-square me-1"></i>編集する
               <% end %>
-            <% end %>
-          </div>
           
+              <%= button_to withdraw_user_path(@user),
+                  method: :patch,
+                  data: { confirm: "本当に退会しますか？" },
+                  class: "btn btn-danger px-4 py-2" do %>
+                <i class="fas fa-user-slash me-1"></i>退会する
+              <% end %>
+            </div>
+          <% end %>
+                    
           <!-- 自己紹介 -->
           <% if @user.introduction.present? %>
             <div class="mt-4">

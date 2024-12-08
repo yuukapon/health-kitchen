@@ -28,7 +28,7 @@ class Public::UsersController < ApplicationController
     if @user.update(is_active: false)
       reset_session
       flash[:notice] = "退会処理が完了しました。ご利用ありがとうございました。"
-      redirect_to root_path
+      redirect_to new_user_registration_path
     else
       flash.now[:alert] = "退会処理に失敗しました。"
       render :edit, status: :unprocessable_entity

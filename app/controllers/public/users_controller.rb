@@ -47,7 +47,7 @@ class Public::UsersController < ApplicationController
   def ensure_correct_user
     unless @user == current_user
       flash[:alert] = "権限がありません。"
-      redirect_to user_path(@user)
+      redirect_to user_path(current_user)
     end
   end
   

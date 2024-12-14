@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     root 'dashboards#index'  
     get 'dashboards', to: 'dashboards#index'
     resources :users, only: [:show, :index, :update]
-    resources :genres, only: [:index, :destroy, :edit, :update]
+    resources :genres, only: [:index, :create, :destroy, :edit, :update] 
     resources :recipes, only: [:show, :index, :destroy] do
       resources :recipe_comments, only: [:destroy]
     end

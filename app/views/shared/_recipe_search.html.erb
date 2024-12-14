@@ -1,0 +1,16 @@
+<div class="card shadow-sm mb-5">
+  <div class="card-body p-4">
+    <%= search_form_for q, url: url, method: :get do |f| %>
+      <div class="input-group">
+        <%= f.search_field search_attributes,
+          placeholder: placeholder,
+          class: 'form-control' %>
+        <div class="input-group-append">
+          <%= button_tag type: 'submit', class: 'btn border px-4' do %>
+            <i class="fa-solid fa-magnifying-glass"></i>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

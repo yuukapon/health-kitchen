@@ -1,7 +1,7 @@
 <%= render 'shared/user_details', 
   user: @user, 
   recipes: @recipes, 
-  admin_view: false
+  admin_view: true 
 %>
 
 <div class="container py-5">
@@ -12,7 +12,7 @@
       <!-- 検索フォーム -->
       <%= render 'shared/recipe_search', 
           q: @q, 
-          url: user_path(@user),
+          url: admin_user_path(@user),
           search_attributes: :title_or_description_or_recipe_ingredients_ingredient_or_genres_name_cont,
           placeholder: '料理名・材料・ジャンル など'
       %>
@@ -20,7 +20,7 @@
       <!-- レシピ一覧 -->
       <div class="recipe-list">
         <% if @recipes.present? %>
-          <%= render 'shared/recipe_cards', recipes: @recipes, admin_view: false %>
+          <%= render 'shared/recipe_cards', recipes: @recipes, admin_view: true %>
         <% else %>
           <div class="text-center text-muted py-5">
             <p>まだレシピが投稿されていません</p>

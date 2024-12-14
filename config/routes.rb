@@ -4,18 +4,26 @@ Rails.application.routes.draw do
     sessions: 'admin/sessions'
   }
   
+  # エンドユーザー用のdevise
+  devise_for :users, controllers: {
+    sessions: 'public/sessions',
+    registrations: 'public/registrations'
+  }
+  
   # 管理者用
   namespace :admin do
     root 'dashboards#index'  
     get 'dashboards', to: 'dashboards#index'
-    resources :users, only: [:index, :update]
-    resources :genres, only: [:index, :create, :destroy, :edit, :update]
+    resources :users, only: [:show, :index, :update]
+    resources :genres, only: [:index, :destroy, :edit, :update]
+    resources :recipes, only: [:show, :index, :destroy] do
+      resources :recipe_comments, only: [:destroy]
+    end
   end
-  
+
   # エンドユーザー用
   scope module: :public do
     root 'homes#top'
-    devise_for :users
     
     get 'homes/about', to: 'homes#about', as: :about
     get 'search', to: 'searches#search', as: :search  

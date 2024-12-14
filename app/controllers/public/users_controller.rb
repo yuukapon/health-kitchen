@@ -8,9 +8,13 @@ class Public::UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
-    @recipes = @user.recipes.includes(:recipe_ingredients, :recipe_favorites)
-                    .order(created_at: :desc)
-                    .page(params[:page])
+    @q = @user.recipes.ransack(params[:q])  
+    @recipes = @q.result(distinct: true)     
+                 .includes(:recipe_ingredients, :recipe_favorites)
+                 .order(created_at: :desc)
+                 .page(params[:page])
+                    
+                    
   end
   
   def edit

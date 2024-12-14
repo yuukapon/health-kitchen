@@ -6,14 +6,14 @@
       <!-- 検索フォーム -->
       <%= render 'shared/recipe_search', 
           q: @q, 
-          url: recipes_path,
+          url: admin_recipes_path,
           search_attributes: :title_or_description_or_user_name_or_recipe_ingredients_ingredient_or_genres_name_cont,
           placeholder: '料理名・材料・ジャンル など'
       %>
       
       <!-- レシピ一覧 -->
       <div class="recipe-list">
-        <%= render 'shared/recipe_cards', recipes: @recipes, admin_view: false %>
+        <%= render 'shared/recipe_cards', recipes: @recipes, admin_view: true %>
       </div>
       
       <!-- ページネーション -->

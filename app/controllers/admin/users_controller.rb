@@ -1,9 +1,18 @@
 class Admin::UsersController < ApplicationController
+  layout 'admin'
   before_action :authenticate_admin!
-  before_action :set_user, only: [:update]
+  before_action :set_user, only: [:show, :update] 
   
   def index
     @users = User.order(created_at: :desc).page(params[:page])
+  end
+  
+  def show
+    @q = @user.recipes.ransack(params[:q])
+    @recipes = @q.result(distinct: true)
+                 .includes(:recipe_ingredients, :recipe_favorites)
+                 .order(created_at: :desc)
+                 .page(params[:page])
   end
   
   def update

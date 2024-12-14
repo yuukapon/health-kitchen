@@ -1,5 +1,5 @@
 <% recipes.each do |recipe| %>
-  <%= link_to recipe_path(recipe), class: "text-decoration-none text-dark" do %>
+   <%= link_to (admin_view ? admin_recipe_path(recipe) : recipe_path(recipe)), class: "text-decoration-none text-dark" do %>
     <div class="card mb-4 shadow-sm hover-effect">
       <div class="row g-0">
         <!-- レシピ画像 -->

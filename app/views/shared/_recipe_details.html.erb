@@ -1,8 +1,6 @@
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-md-8"> 
-      
-      <!-- レシピ基本情報部分 -->
       <div class="card shadow-sm mb-4">
         <div class="card-body">
           <div class="row">
@@ -11,84 +9,100 @@
               <%= image_tag recipe.get_image(300,300), class: "img-fluid rounded w-100 h-100 object-fit-cover" %>
             </div>
                           
-              <!-- 右側：レシピ情報 -->
-              <div class="col-12 col-md-8">
-                <div class="position-relative">
-                  <!-- レシピ情報本体 -->
-                  <div class="pe-5 pe-md-6"> 
-                    <!-- タイトル -->
-                    <div class="d-flex">
-                      <h2 class="fw-bold mb-3 text-break pe-5" style="max-width: calc(100% - 120px);">
-                        <%= recipe.title %>
-                      </h2>
-                    </div>
-                    
-                    <!-- ユーザーアイコンと名前 -->
-                    <div class="mb-3">
-                      <%= link_to user_path(recipe.user.id), class: "text-decoration-none" do %>
-                        <div class="d-flex align-items-center">
-                          <%= image_tag recipe.user.get_profile_image(40,40), class: "rounded-circle me-2" %>
-                          <span class="text-dark"><%= recipe.user.name %></span>
-                        </div>
-                      <% end %>
-                    </div>
-                    
-                    <!-- 調理時間 -->
-                    <div class="border shadow-sm bg-warning d-inline-block px-3 py-1 rounded my-2">
-                      <i class="fa-solid fa-clock me-1"></i>
-                      調理時間 <%= recipe.cook_time %>
-                    </div>
-                    
-                    <!-- レシピの説明 -->
-                    <p class="mb-4"><%= recipe.description %></p>
+            <!-- 右側：レシピ情報 -->
+            <div class="col-12 col-md-8">
+              <div class="position-relative">
+                <div class="pe-5"> 
+                  <h2 class="fw-bold mb-3 text-break">
+                    <%= recipe.title %>
+                  </h2>
+                  
+                  <!-- ユーザーアイコンと名前 -->
+                  <div class="mb-3">
+                    <%= link_to (admin_view ? admin_user_path(recipe.user.id) : user_path(recipe.user.id)), 
+                        class: "text-decoration-none" do %>
+                      <div class="d-flex align-items-center">
+                        <%= image_tag recipe.user.get_profile_image(40,40), class: "rounded-circle me-2" %>
+                        <span class="text-dark"><%= recipe.user.name %></span>
+                      </div>
+                    <% end %>
                   </div>
-              
-                  <!-- 編集・削除ボタン -->
-                  <% if recipe.user == current_user %>
-                    <div class="position-absolute top-0 end-0" style="width: 120px;">
-                      <%= link_to edit_recipe_path(recipe), class: "btn px-3 py-2 text-white rounded-3 mb-2 w-100", style: "background-color: #ED7D31;" do %>
-                        <i class="fa-solid fa-pen-to-square me-1"></i>編集
-                      <% end %>
-                      
-                      <%= link_to recipe_path(recipe), method: :delete, 
-                          data: { confirm: "このレシピを削除してもよろしいですか？" }, 
-                          class: "btn btn-outline-danger px-3 py-2 rounded-3 w-100" do %>
-                        <i class="fa-solid fa-trash me-1"></i>削除
-                      <% end %>
-                    </div>
-                  <% end %>
+                  
+                  <!-- 調理時間 -->
+                  <div class="border shadow-sm bg-warning d-inline-block px-3 py-1 rounded my-2">
+                    <i class="fa-solid fa-clock me-1"></i>
+                    調理時間 <%= recipe.cook_time %>
+                  </div>
+                  
+                  <!-- レシピの説明 -->
+                  <p class="mb-4"><%= recipe.description %></p>
                 </div>
+              
+                <!-- 管理者用削除ボタンまたはユーザー用編集・削除ボタン -->
+                <% if admin_view %>
+                  <div class="position-absolute top-0 end-0">
+                    <%= link_to admin_recipe_path(recipe), method: :delete, 
+                        data: { confirm: "このレシピを削除してもよろしいですか？" }, 
+                        class: "btn btn-danger px-3 py-2 rounded-3" do %>
+                      <i class="fa-solid fa-trash me-1"></i>
+                      <span class="d-none d-md-inline">レシピを削除</span>
+                    <% end %>
+                  </div>
+                <% elsif recipe.user == current_user %>
+                  <div class="position-absolute top-0 end-0" style="width: 120px;">
+                    <%= link_to edit_recipe_path(recipe), class: "btn px-3 py-2 text-white rounded-3 mb-2 w-100", style: "background-color: #ED7D31;" do %>
+                      <i class="fa-solid fa-pen-to-square me-1"></i>
+                      <span class="d-none d-md-inline">編集</span>
+                    <% end %>
+                    
+                    <%= link_to recipe_path(recipe), method: :delete, 
+                        data: { confirm: "このレシピを削除してもよろしいですか？" }, 
+                        class: "btn btn-outline-danger px-3 py-2 rounded-3 w-100" do %>
+                      <i class="fa-solid fa-trash me-1"></i>
+                      <span class="d-none d-md-inline">削除</span>
+                    <% end %>
+                  </div>
+                <% end %>
               </div>
+            </div>
           </div>
         </div>
       </div>
-  
+
       <!-- いいねとコメント数 -->
       <div class="row my-4">
         <div class="col-12">
           <div class="d-flex justify-content-center gap-2">
-            <!-- いいねボタン -->
-            <% if recipe.favorited_by?(current_user) %>
-              <%= form_with url: recipe_recipe_favorite_path(recipe), method: :delete, local: true do |f| %>
-                <%= f.button type: :submit, class: "btn border shadow-sm px-4" do %>
-                  <i class="fa-solid fa-heart me-1 text-danger"></i>
-                  <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
-                <% end %>
-              <% end %>
+            <% if admin_view %>
+              <!-- 管理者用（数の表示のみ） -->
+              <div class="btn border shadow-sm px-4">
+                <i class="fa-solid fa-heart me-1 text-danger"></i>
+                <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
+              </div>
             <% else %>
-              <%= form_with url: recipe_recipe_favorite_path(recipe), method: :post, local: true do |f| %>
-                <%= f.button type: :submit, class: "btn border shadow-sm px-4" do %>
-                  <i class="fa-regular fa-heart me-1 text-danger"></i>
-                  <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
+              <!-- ユーザー用（いいねボタン） -->
+              <% if recipe.favorited_by?(current_user) %>
+                <%= form_with url: recipe_recipe_favorite_path(recipe), method: :delete, local: true do |f| %>
+                  <%= f.button type: :submit, class: "btn border shadow-sm px-4" do %>
+                    <i class="fa-solid fa-heart me-1 text-danger"></i>
+                    <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <%= form_with url: recipe_recipe_favorite_path(recipe), method: :post, local: true do |f| %>
+                  <%= f.button type: :submit, class: "btn border shadow-sm px-4" do %>
+                    <i class="fa-regular fa-heart me-1 text-danger"></i>
+                    <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
 
             <!-- コメント数 -->
-            <button class="btn border shadow-sm px-4">
+            <div class="btn border shadow-sm px-4">
               <i class="fa-regular fa-comment me-2 text-primary"></i>
               <span class="fw-medium"><%= recipe.recipe_comments.count %></span>
-            </button>
+            </div>
           </div>
         </div>
       </div>
@@ -168,7 +182,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- コメントセクション -->
       <div class="row">
         <div class="col-12">
@@ -177,22 +191,24 @@
               <h5 class="mb-0 fw-bold">コメント <%= recipe.recipe_comments.count %>件</h5>
             </div>
             
-            <!-- コメント入力フォーム -->
-            <div class="card-body border-bottom">
-              <%= form_with model: [recipe, recipe_comment], local: true do |f| %>
-                <div class="mb-3">
-                  <label class="form-label">コメントを入力</label>
-                  <%= f.text_area :comment,
-                      class: "form-control rounded-4 p-3",
-                      style: "background-color: #FFFFE0;",
-                      rows: 3,
-                      placeholder: "レシピについての感想や質問を書いてみましょう" %>
-                </div>
-                <div class="d-flex justify-content-end">
-                  <%= f.submit "コメントする", class: "btn px-4 py-2 text-white rounded-3", style: "background-color: #ED7D31;" %>
-                </div>
-              <% end %>
-            </div>
+            <!-- コメント入力フォーム（管理者以外） -->
+            <% unless admin_view %>
+              <div class="card-body border-bottom">
+                <%= form_with model: [recipe, recipe_comment], local: true do |f| %>
+                  <div class="mb-3">
+                    <label class="form-label">コメントを入力</label>
+                    <%= f.text_area :comment,
+                        class: "form-control rounded-4 p-3",
+                        style: "background-color: #FFFFE0;",
+                        rows: 3,
+                        placeholder: "レシピについての感想や質問を書いてみましょう" %>
+                  </div>
+                  <div class="d-flex justify-content-end">
+                    <%= f.submit "コメントする", class: "btn px-4 py-2 text-white rounded-3", style: "background-color: #ED7D31;" %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
 
             <!-- コメント一覧 -->
             <div class="card-body">
@@ -206,12 +222,14 @@
                   
                   <p class="mb-2"><%= recipe_comment.comment %></p>
                   
-                  <% if recipe_comment.user == current_user %>
+                  <!-- コメント削除ボタン -->
+                  <% if admin_view || recipe_comment.user == current_user %>
                     <div class="text-end">
-                      <%= form_with url: recipe_recipe_comment_path(recipe, recipe_comment), method: :delete, local: true do |f| %>
-                        <%= f.button type: :submit, class: "btn btn-link text-dark p-2", data: { confirm: "コメントを削除してもよろしいですか？" } do %>
-                          <i class="fa-solid fa-trash fs-5"></i>
-                        <% end %>
+                      <%= link_to (admin_view ? admin_recipe_recipe_comment_path(recipe, recipe_comment) : recipe_recipe_comment_path(recipe, recipe_comment)), 
+                          method: :delete, 
+                          data: { confirm: "このコメントを削除してもよろしいですか？" },
+                          class: "btn btn-link text-danger p-2" do %>
+                        <i class="fa-solid fa-trash"></i>
                       <% end %>
                     </div>
                   <% end %>

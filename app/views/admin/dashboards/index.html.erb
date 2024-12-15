@@ -22,60 +22,63 @@
                 <tbody>
                   <% @users.each do |user| %>
                     <tr>
-                      <td class="text-center"><%= user.id %></td>
-                      
-                      <td class="text-center">
-                        <%= image_tag user.get_profile_image(80,80), 
-                            class: "rounded-circle img-fluid w-50",
-                            alt: "#{user.name}のプロフィール画像" %>
-                      </td>
-                      
-                      <td>
-                        <%= link_to admin_user_path(user), class: "text-decoration-none" do %>
-                          <div class="fw-bold text-dark"><%= user.name %></div>
-                        <% end %>
-                        <small class="text-muted">
-                          <%= user.created_at.strftime('%Y/%m/%d') %>
-                        </small>
-                      </td>
-                      
-                      <td class="text-break">
-                        <i class="fas fa-envelope me-1 text-muted"></i>
-                        <%= user.email %>
-                      </td>
-                      
-                      <td class="text-center">
-                        <span class="badge rounded-pill bg-light text-dark border">
-                          <i class="fas fa-pencil-alt me-1"></i>
-                          <%= user.recipes.count %>
-                        </span>
-                      </td>
-                      
-                      <td class="text-center">
-                        <% if user.is_active %>
-                          <span class="badge rounded-pill bg-success-subtle text-success">
-                            <i class="fas fa-check-circle me-1"></i>有効
-                          </span>
-                        <% else %>
-                          <span class="badge rounded-pill bg-secondary-subtle text-secondary">
-                            <i class="fas fa-ban me-1"></i>退会
-                          </span>
-                        <% end %>
-                      </td>
-                      
-                      <td class="text-center">
-                        <% if user.is_active %>
-                          <%= button_to admin_user_path(user),
-                              method: :patch,
-                              data: { 
-                                confirm: "#{user.name}さんを退会させますか？",
-                                "turbo-method": :patch 
-                              },
-                              class: "btn btn-outline-danger btn-sm" do %>
-                            <i class="fas fa-user-slash me-1"></i>退会
-                          <% end %>
-                        <% else %>
-                          <span class="badge bg-secondary">退会済み</span>
+                      <td colspan="7" class="p-0">
+                        <%= link_to admin_user_path(user), 
+                            class: "text-decoration-none d-block p-2",
+                            data: { turbolinks: true } do %>
+                          <div class="row align-items-center mx-0">
+                            <div class="col-1 text-center text-dark"><%= user.id %></div>
+                            
+                            <div class="col-2 text-center">
+                              <%= image_tag user.get_profile_image(80,80), 
+                                  class: "rounded-circle img-fluid w-50",
+                                  alt: "#{user.name}のプロフィール画像" %>
+                            </div>
+                            
+                            <div class="col-3">
+                              <div class="fw-bold text-dark"><%= user.name %></div>
+                              <small class="text-muted">
+                                <%= user.created_at.strftime('%Y/%m/%d') %>
+                              </small>
+                            </div>
+                            
+                            <div class="col-3 text-break text-dark">
+                              <i class="fas fa-envelope me-1 text-muted"></i>
+                              <%= user.email %>
+                            </div>
+                            
+                            <div class="col-1 text-center">
+                              <span class="badge rounded-pill bg-light text-dark border">
+                                <i class="fas fa-pencil-alt me-1"></i>
+                                <%= user.recipes.count %>
+                              </span>
+                            </div>
+                            
+                            <div class="col-1 text-center">
+                              <% if user.is_active %>
+                                <span class="badge rounded-pill bg-success-subtle text-success">
+                                  <i class="fas fa-check-circle me-1"></i>有効
+                                </span>
+                              <% else %>
+                                <span class="badge rounded-pill bg-secondary-subtle text-secondary">
+                                  <i class="fas fa-ban me-1"></i>退会
+                                </span>
+                              <% end %>
+                            </div>
+                            
+                            <div class="col-1 text-center">
+                              <% if user.is_active %>
+                                <%= button_to admin_user_path(user),
+                                    method: :patch,
+                                    data: { confirm: "#{user.name}さんを退会させますか？" },
+                                    class: "btn btn-outline-danger btn-sm" do %>
+                                  <i class="fas fa-user-slash me-1"></i>退会
+                                <% end %>
+                              <% else %>
+                                <span class="badge bg-secondary">退会済み</span>
+                              <% end %>
+                            </div>
+                          </div>
                         <% end %>
                       </td>
                     </tr>

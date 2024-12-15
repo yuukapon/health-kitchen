@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  # ページネーション設定         
+  paginates_per 10  # 1ページあたり10件表示
 
   # レシピ関連のアソシエーション
   has_many :recipes, dependent: :destroy

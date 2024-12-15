@@ -168,4 +168,51 @@ RecipeStep.create!([
  { recipe: candiedsweetpotatoes, description: "中火のまま(A)を加え、全体に味をなじませたら火から下ろし、お皿に盛り付けて完成" }
 ])
 
+
+# ----------- カオマンガイ -----------
+khaomangai = Recipe.find_or_create_by!(title: "プロの味！炊飯器でつくるカオマンガイ") do |recipe|
+recipe.image = ActiveStorage::Blob.create_and_upload!(
+  io: File.open("#{Rails.root}/db/fixtures/sample-post4.png"),
+  filename: "sample-post4.png"
+)
+recipe.description = "鶏肉は、厚みを均一にすることでムラなく火が通ります！"
+recipe.user = inaba
+recipe.cook_time = "約1時間"
+recipe.people_count = 2
+recipe.is_active = true
+recipe.genres = [
+  Genre.find_by(name: "主菜"),
+  Genre.find_by(name: "東南アジア系料理")
+]
+end
+
+# カオマンガイの材料
+RecipeIngredient.create!([
+{ recipe: khaomangai, ingredient: "鶏もも肉", quantity: "大1枚（約350g）" },
+{ recipe: khaomangai, ingredient: "にんにく", quantity: "2かけ" },
+{ recipe: khaomangai, ingredient: "しょうが", quantity: "1かけ" },
+{ recipe: khaomangai, ingredient: "塩", quantity: "小さじ1" },
+{ recipe: khaomangai, ingredient: "酒", quantity: "大さじ2" },
+{ recipe: khaomangai, ingredient: "米", quantity: "2合" },
+{ recipe: khaomangai, ingredient: "ねぎ(青い部分)", quantity: "適宜" },
+{ recipe: khaomangai, ingredient: "香菜", quantity: "2～3株" },
+{ recipe: khaomangai, ingredient: "塩、粗びき黒コショウ", quantity: "各適宜" }
+])
+
+# カオマンガイの手順
+RecipeStep.create!([
+{ recipe: khaomangai, description: "ショウガとにんにくはラップで包み、麺棒でたたいて細かくつぶす" },
+{ recipe: khaomangai, description: "鶏モモ肉は厚みを均一にし、半分に切る（片面約1.5cm程度）" },
+{ recipe: khaomangai, description: "鶏肉の両面に塩を適量すり込む（下味）" },
+{ recipe: khaomangai, description: "米は研いでから、つぶしたにんにく・しょうが・塩(小さじ1)・酒(大さじ2)を入れて軽く混ぜる" },
+{ recipe: khaomangai, description: "通常の水加減より少なめにする（やや硬めに炊くため）" },
+{ recipe: khaomangai, description: "香菜の根、ねぎの青い部分を入れる" },
+{ recipe: khaomangai, description: "最後に鶏肉を広げて置く（重ねすぎると中まで火が通りにくいので注意）" },
+{ recipe: khaomangai, description: "炊飯 (炊き込みご飯モードがある場合はそちらを使用 / ない場合は通常の白米モードで可)" },
+{ recipe: khaomangai, description: "炊き上がったら鶏肉とねぎを取り出し、ご飯を軽く混ぜる" },
+{ recipe: khaomangai, description: "鶏肉は食べやすい大きさに切る" },
+{ recipe: khaomangai, description: "器に盛り、香味だれをかける" },
+{ recipe: khaomangai, description: "お好みで香菜、粗びき黒コショウをトッピング" }
+])
+
 puts "seedの実行が完了しました"

@@ -1,16 +1,21 @@
-<div class="card shadow-sm mb-5">
-  <div class="card-body p-4">
-    <%= search_form_for q, url: url, method: :get do |f| %>
-      <div class="input-group">
-        <%= f.search_field search_attributes,
-          placeholder: placeholder,
-          class: 'form-control' %>
-        <div class="input-group-append">
-          <%= button_tag type: 'submit', class: 'btn border px-4' do %>
-            <i class="fa-solid fa-magnifying-glass"></i>
-          <% end %>
-        </div>
+<!--検索フォーム-->
+<div class="mb-4">
+  <%= search_form_for q, url: url, method: :get do |f| %>
+    <!--入力フィールドとボタンのグループ -->
+    <div class="input-group">
+      <!--検索入力フィールド -->
+      <%= f.search_field search_attributes,
+        placeholder: placeholder,
+        class: 'form-control' %>
+
+      <!--検索ボタン -->
+      <div class="input-group-append">
+        <%= button_tag type: 'submit', 
+            class: 'btn btn-lg text-white d-flex align-items-center',
+            style: 'background-color: #7F6000;' do %>
+          <i class="fa-solid fa-magnifying-glass"></i>
+        <% end %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>

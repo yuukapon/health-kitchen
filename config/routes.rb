@@ -16,8 +16,11 @@ Rails.application.routes.draw do
     get 'dashboards', to: 'dashboards#index'
     resources :users, only: [:show, :index, :update]
     resources :genres, only: [:index, :create, :destroy, :edit, :update] 
+    resources :recipe_comments, only: [:index]     # 全コメントの一覧用
+    resources :recipe_reviews, only: [:index]      # 全レビューの一覧用
     resources :recipes, only: [:show, :index, :destroy] do
       resources :recipe_comments, only: [:destroy]
+      resources :recipe_reviews, only: [:destroy]
     end
   end
 
@@ -28,9 +31,10 @@ Rails.application.routes.draw do
     get 'homes/about', to: 'homes#about', as: :about
     get 'search', to: 'searches#search', as: :search  
     
-    resources :recipes, only: [:new, :index, :show, :destroy, :create, :edit, :update] do
+    resources :recipes do
       resources :recipe_comments, only: [:create, :destroy]
       resource :recipe_favorite, only: [:create, :destroy]
+      resources :recipe_reviews, only: [:create, :edit, :update, :destroy]
     end
     
     resources :users, only: [:show, :edit, :update, :withdraw] do

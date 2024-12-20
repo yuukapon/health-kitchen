@@ -5,7 +5,8 @@ class Recipe < ApplicationRecord
   has_many :recipe_favorites, dependent: :destroy
   has_many :recipe_ingredients, dependent: :destroy
   has_many :recipe_steps, dependent: :destroy
-  
+  has_many :recipe_reviews, dependent: :destroy
+
   # ジャンルのアソシエーション
   has_many :recipe_genres, dependent: :destroy  # 中間テーブルとの関連付け
   has_many :genres, through: :recipe_genres     # genresとの多対多の関連付け
@@ -50,6 +51,31 @@ class Recipe < ApplicationRecord
     ]
   end
   
+  # review平均値計算メソッド群
+  # レビューが存在しない場合は0を返す
+  def average_rate
+    rates = recipe_reviews.pluck(:healthy_rate, :satisfaction_rate, :easy_rate)
+    return 0 if rates.empty?
+    
+    total_average = rates.map { |r| r.sum / 3.0 }.sum / rates.size
+    total_average.round(1)
+  end
+  
+  def average_healthy_rate
+    return 0 if recipe_reviews.empty?
+    recipe_reviews.average(:healthy_rate).to_f.round(1)
+  end
+  
+  def average_satisfaction_rate
+    return 0 if recipe_reviews.empty?
+    recipe_reviews.average(:satisfaction_rate).to_f.round(1)
+  end
+  
+  def average_easy_rate
+    return 0 if recipe_reviews.empty?
+    recipe_reviews.average(:easy_rate).to_f.round(1)
+  end
+    
   # バリデーション
   validates :title, presence: true, 
                    length: { minimum: 2, maximum: 20, 

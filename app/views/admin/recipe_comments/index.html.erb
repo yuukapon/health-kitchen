@@ -1,0 +1,79 @@
+<div class="container py-5">
+  <div class="row justify-content-center mb-5">
+    <div class="col-12">
+      <h1 class="text-center mb-4">コメント管理</h1>
+      
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th class="col-1 text-center">コメントID</th>
+                  <th class="col-3 text-start">コメント内容</th>
+                  <th class="col-1 text-center">レシピ画像</th>
+                  <th class="col-1 text-center">レシピID</th>
+                  <th class="col-2 text-start">レシピ名</th>
+                  <th class="col-1 text-center">プロフィール</th>
+                  <th class="col-1 text-center">ユーザーID</th>
+                  <th class="col-1 text-center">ユーザー名</th>
+                  <th class="col-1 text-center">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @comments.each do |comment| %>
+                  <tr>
+                    <td class="text-center text-muted"><%= comment.id %></td>
+                    <td><%= comment.comment %></td>
+                    
+                    <!-- レシピ情報 -->
+                    <td class="text-center">
+                      <%= link_to admin_recipe_path(comment.recipe) do %>
+                        <%= image_tag comment.recipe.get_image(80,80), class: "rounded img-fluid" %>
+                      <% end %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to comment.recipe.id, admin_recipe_path(comment.recipe), class: "text-decoration-none text-muted" %>
+                    </td>
+                    <td>
+                      <%= link_to comment.recipe.title, admin_recipe_path(comment.recipe), class: "text-decoration-none text-dark" %>
+                    </td>
+                    
+                    <!-- ユーザー情報 -->
+                    <td class="text-center">
+                      <%= link_to admin_user_path(comment.user) do %>
+                        <%= image_tag comment.user.get_profile_image(50,50), class: "rounded-circle img-fluid" %>
+                      <% end %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to comment.user.id, admin_user_path(comment.user), class: "text-decoration-none text-muted" %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to comment.user.name, admin_user_path(comment.user), class: "text-decoration-none text-dark" %>
+                    </td>
+                    
+                    <!-- 削除ボタン -->
+                    <td class="text-center">
+                      <%= link_to admin_recipe_recipe_comment_path(comment.recipe, comment), 
+                          method: :delete,
+                          data: { confirm: "このコメントを削除してもよろしいですか？" },
+                          class: "btn btn-sm btn-outline-danger" do %>
+                        <i class="fa-solid fa-trash me-1"></i>
+                        削除
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ページネーション -->
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @comments, class: 'pagination' %>
+      </div>
+    </div>
+  </div>
+</div>

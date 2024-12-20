@@ -1,0 +1,78 @@
+<!-- エラーメッセージ -->
+<% if review = (recipe_review || RecipeReview.new) %>
+  <% if review.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading mb-3">
+        <i class="fa-solid fa-exclamation-circle me-2"></i>
+        <%= review.errors.count %>件のエラーが発生しました
+      </h5>
+      <ul class="mb-0 ps-4">
+        <% review.errors.full_messages.each do |message| %>
+          <li class="mb-1"><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% end %>
+
+<%= form_with model: [recipe, recipe_review || RecipeReview.new], local: true do |f| %>
+  <div class="review-ratings mb-3">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">ヘルシー度</label>
+        <div id="healthy-rating"></div>
+      </div>
+      
+      <div class="col-md-4">
+        <label class="form-label">満足感</label>
+        <div id="satisfaction-rating"></div>
+      </div>
+      
+      <div class="col-md-4">
+        <label class="form-label">簡単さ</label>
+        <div id="easy-rating"></div>
+      </div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <span class="badge mr-2 text-white" style="background-color: #5B9BD5;">任意</span>
+    <%= f.label :comment, 'コメント', class: 'form-label' %>
+    <%= f.text_area :comment,
+        class: "form-control rounded-4 p-3",
+        style: "background-color: #FFFFE0;",
+        rows: 3,
+        placeholder: "レシピの感想を書いてみましょう" %>
+  </div>
+  <div class="d-flex justify-content-end">
+    <%= f.submit submit_text, class: "btn px-4 py-2 text-white rounded-3", style: "background-color: #ED7D31;" %>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  let ratingConfig = {
+    starOn: '/assets/star-on.png',
+    starOff: '/assets/star-off.png',
+    starHalf: '/assets/star-half.png',
+    half: true
+  };
+  
+  raty(document.querySelector('#healthy-rating'), {
+    ...ratingConfig,
+    score: <%= recipe_review&.healthy_rate.to_f || 0 %>,
+    scoreName: 'recipe_review[healthy_rate]'
+  });
+  
+  raty(document.querySelector('#satisfaction-rating'), {
+    ...ratingConfig,
+    score: <%= recipe_review&.satisfaction_rate.to_f || 0 %>,
+    scoreName: 'recipe_review[satisfaction_rate]'
+  });
+  
+  raty(document.querySelector('#easy-rating'), {
+    ...ratingConfig,
+    score: <%= recipe_review&.easy_rate.to_f || 0 %>,
+    scoreName: 'recipe_review[easy_rate]'
+  });
+});
+</script>

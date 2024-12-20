@@ -1,0 +1,67 @@
+<% recipe.recipe_reviews.order(created_at: :desc).each do |review| %>
+  <% if review.persisted? %>
+    <div class="border rounded-4 p-3 mb-3">
+      <div class="d-flex align-items-center mb-2">
+        <%= image_tag review.user.get_profile_image(40,40), class: "rounded-circle me-2" %>
+        <span class="fw-bold"><%= review.user.name %></span>
+        <small class="text-muted m-2"><%= review.created_at.strftime('%Y/%m/%d') %></small>
+      </div>
+      
+      <div class="review-ratings mb-3">
+        <div class="d-flex flex-wrap gap-4">
+          <div>
+            <small class="text-muted d-block">ヘルシー度</small>
+            <div class="rating-display" data-score="<%= review.healthy_rate %>"></div>
+          </div>
+          <div>
+            <small class="text-muted d-block">満足感</small>
+            <div class="rating-display" data-score="<%= review.satisfaction_rate %>"></div>
+          </div>
+          <div>
+            <small class="text-muted d-block">簡単さ</small>
+            <div class="rating-display" data-score="<%= review.easy_rate %>"></div>
+          </div>
+        </div>
+      </div>
+
+      <% if review.comment.present? %>
+        <p class="mb-2">
+          <i class="fa-solid fa-comment text-muted me-2"></i>
+          <%= review.comment %>
+        </p>
+      <% end %>
+
+      <% if review.user == current_user %>
+        <div class="text-end mt-3">
+          <%= link_to edit_recipe_recipe_review_path(recipe, review), 
+              class: "btn btn-sm btn-outline-success me-2" do %>
+            <i class="fa-solid fa-pen-to-square me-1"></i>
+            編集
+          <% end %>
+          <%= link_to recipe_recipe_review_path(recipe, review), 
+              method: :delete,
+              data: { confirm: "このレビューを削除してもよろしいですか？" },
+              class: "btn btn-sm btn-outline-danger" do %>
+            <i class="fa-solid fa-trash me-1"></i>
+            削除
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.rating-display').forEach(function(elem) {
+    raty(elem, {
+      starOn: '/assets/star-on.png',
+      starOff: '/assets/star-off.png',
+      starHalf: '/assets/star-half.png',
+      score: elem.dataset.score,
+      readOnly: true,
+      half: true
+    });
+  });
+});
+</script>

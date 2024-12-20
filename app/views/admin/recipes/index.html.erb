@@ -1,25 +1,109 @@
 <div class="container py-5">
-  <div class="row justify-content-center mb-5">
-    <div class="col-lg-8 col-md-10">
-      <h1 class="text-center mb-4">レシピ一覧</h1>
-      
-      <!-- 検索フォーム -->
-      <%= render 'shared/recipe_search', 
-          q: @q, 
-          url: admin_recipes_path,
-          search_attributes: :title_or_description_or_user_name_or_recipe_ingredients_ingredient_or_genres_name_cont,
-          placeholder: '料理名・材料・ジャンル など'
-      %>
-      
-      <!-- レシピ一覧 -->
-      <div class="recipe-list">
-        <%= render 'shared/recipe_cards', recipes: @recipes, admin_view: true %>
-      </div>
-      
-      <!-- ページネーション -->
-      <div class="d-flex justify-content-center mt-4">
-        <%= paginate @recipes, class: 'pagination' %>
-      </div>
-    </div>
-  </div>
+ <div class="row justify-content-center mb-5">
+   <div class="col-12">
+     <h1 class="text-center mb-4">レシピ管理</h1>
+     
+     <!-- 検索フォーム -->
+     <%= render 'shared/recipe_search', 
+         q: @q, 
+         url: admin_recipes_path,
+         search_attributes: :title_or_description_or_user_name_or_recipe_ingredients_ingredient_or_genres_name_cont,
+         placeholder: '料理名・材料・ジャンル など'
+     %>
+     
+     <!-- レシピ一覧テーブル -->
+     <div class="card shadow-sm">
+       <div class="card-body">
+         <div class="table-responsive">
+            <table class="table table-hover align-middle">
+             <thead class="table-light">
+               <tr>
+                 <th class="col-1 text-center">レシピID</th>
+                 <th class="col-1 text-center">レシピ画像</th>
+                 <th class="col-2">レシピ名</th>
+                 <th class="col-1 text-center">プロフィール画像</th>
+                 <th class="col-1 text-center">ユーザーID</th>
+                 <th class="col-2 text-center">ユーザー名</th>
+                 <th class="text-center col-1">いいね</th>
+                 <th class="text-center col-1">コメント</th>
+                 <th class="text-center col-1">レビュー</th>
+                 <th class="col-1 text-center">操作</th>
+               </tr>
+             </thead>
+              <tbody>
+                <% @recipes.each do |recipe| %>
+                  <tr>
+                    <!-- レシピ詳細へのリンク部分 -->
+                    <td class="text-muted text-center">
+                      <%= link_to admin_recipe_path(recipe), class: "text-decoration-none text-muted" do %>
+                        <%= recipe.id %>
+                      <% end %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to admin_recipe_path(recipe), class: "text-decoration-none" do %>
+                        <%= image_tag recipe.get_image(80,80), class: "rounded img-fluid" %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= link_to recipe.title, admin_recipe_path(recipe), class: "text-decoration-none text-dark" %>
+                    </td>
+                    
+                    <!-- ユーザー詳細へのリンク部分 -->
+                    <td class="text-center">
+                      <%= link_to admin_user_path(recipe.user), class: "text-decoration-none" do %>
+                        <%= image_tag recipe.user.get_profile_image(50,50), class: "rounded-circle img-fluid" %>
+                      <% end %>
+                    </td>
+                    <td class="text-muted text-center">
+                      <%= link_to recipe.user.id, admin_user_path(recipe.user), class: "text-decoration-none text-muted" %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to recipe.user.name, admin_user_path(recipe.user), class: "text-decoration-none text-dark" %>
+                    </td>
+                    
+                    <!-- 以下は変更なし -->
+                    <td class="text-center">
+                      <span class="badge rounded-pill bg-light text-dark border">
+                        <i class="fa-regular fa-heart text-danger me-1"></i>
+                        <%= recipe.recipe_favorites.count %>
+                      </span>
+                    </td>
+                    
+                    <td class="text-center">
+                      <span class="badge rounded-pill bg-light text-dark border">
+                        <i class="fa-regular fa-comment text-primary me-1"></i>
+                        <%= recipe.recipe_comments.count %>
+                      </span>
+                    </td>
+                    
+                    <td class="text-center">
+                      <span class="badge rounded-pill bg-light text-dark border">
+                        <i class="fa-solid fa-star text-warning me-1"></i>
+                        <%= recipe.recipe_reviews.count %>
+                      </span>
+                    </td>
+                    
+                    <td class="text-center">
+                      <%= link_to admin_recipe_path(recipe), 
+                          method: :delete,
+                          data: { confirm: "このレシピを削除してもよろしいですか？" },
+                          class: "btn btn-sm btn-outline-danger" do %>
+                        <i class="fa-solid fa-trash me-1"></i>
+                        削除
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+         </div>
+       </div>
+     </div>
+     
+     <!-- ページネーション -->
+     <div class="d-flex justify-content-center mt-4">
+       <%= paginate @recipes, class: 'pagination' %>
+     </div>
+   </div>
+ </div>
 </div>

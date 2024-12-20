@@ -25,7 +25,7 @@ class Public::RecipesController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-  
+
   def index
     @recipe = Recipe.new
     @q = Recipe.ransack(params[:q])
@@ -57,61 +57,5 @@ class Public::RecipesController < ApplicationController
     @recipe.destroy
     flash[:success] = "レシピを削除しました。"
     redirect_to recipes_path
-  end
-  
-class Public::RecipesController < ApplicationController
-  def sort_ingredients
-    @recipe = Recipe.find(params[:id])
-    @recipe.recipe_ingredients.each do |ingredient|
-      ingredient.update(position: params[:ingredient_positions].index(ingredient.id.to_s) + 1)
-    end
-    head :ok
-  end
-
-  def sort_steps
-    @recipe = Recipe.find(params[:id])
-    @recipe.recipe_steps.each do |step|
-      step.update(position: params[:step_positions].index(step.id.to_s) + 1)
-    end
-    head :ok
-  end
-
-  def sort_genres
-    @recipe = Recipe.find(params[:id])
-    @recipe.recipe_genres.each do |genre|
-      genre.update(position: params[:genre_positions].index(genre.id.to_s) + 1)
-    end
-    head :ok
-  end
-end
-
-  private
-
-  def set_recipe
-    @recipe = Recipe.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    flash[:error] = "レシピが見つかりませんでした。"
-    redirect_to recipes_path
-  end
-
-  def authorize_recipe
-    unless @recipe.user == current_user
-      flash[:error] = "このアクションは許可されていません。"
-      redirect_to recipes_path
-    end
-  end
-
-  def recipe_params
-    params.require(:recipe).permit(
-      :title,
-      :description,
-      :people_count,
-      :cook_time,
-      :is_active,
-      :image,
-      recipe_ingredients_attributes: [:id, :ingredient, :quantity, :_destroy],
-      recipe_steps_attributes: [:id, :description, :step_image, :_destroy],
-      recipe_genres_attributes: [:id, :genre_id, :_destroy] 
-    )
   end
 end

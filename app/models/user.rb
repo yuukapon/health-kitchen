@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :recipe_favorites, dependent: :destroy
   has_many :recipe_ingredients, dependent: :destroy
   has_many :recipe_steps, dependent: :destroy
+  has_many :recipe_reviews, dependent: :destroy
 
   # ネストされた属性
   accepts_nested_attributes_for :recipe_ingredients, allow_destroy: true

@@ -14,7 +14,6 @@ class Admin::RecipesController < ApplicationController
 
   def show
     # set_recipeで@recipeが設定されるので、ここは空でOK
-    @recipe_comments = @recipe.recipe_comments  # コメント一覧を表示
   end
   
   def destroy

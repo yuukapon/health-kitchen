@@ -52,15 +52,17 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbolinks:load', function() { 
   document.querySelectorAll('.rating-display').forEach(function(elem) {
-    raty(elem, {
+    const newRaty = new Raty(elem);  
+    newRaty.init({
       starOn: '<%= asset_path('star-on.png') %>',
       starOff: '<%= asset_path('star-off.png') %>',
       starHalf: '<%= asset_path('star-half.png') %>',
       score: elem.dataset.score,
       readOnly: true,
-      half: true
+      half: true,
+      number: 5  
     });
   });
 });

@@ -33,27 +33,34 @@
 <% end %>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbolinks:load', function() {
   let ratingConfig = {
     starOn: '<%= asset_path('star-on.png') %>',
     starOff: '<%= asset_path('star-off.png') %>',
     starHalf: '<%= asset_path('star-half.png') %>',
-    half: true
+    half: true,
+    number: 5
   };
   
-  raty(document.querySelector('#healthy-rating'), {
+  // ヘルシー度の評価
+  const healthyRaty = new Raty(document.querySelector('#healthy-rating'));
+  healthyRaty.init({
     ...ratingConfig,
     score: <%= recipe_review&.healthy_rate.to_f || 0 %>,
     scoreName: 'recipe_review[healthy_rate]'
   });
   
-  raty(document.querySelector('#satisfaction-rating'), {
+  // 満足感の評価
+  const satisfactionRaty = new Raty(document.querySelector('#satisfaction-rating'));
+  satisfactionRaty.init({
     ...ratingConfig,
     score: <%= recipe_review&.satisfaction_rate.to_f || 0 %>,
     scoreName: 'recipe_review[satisfaction_rate]'
   });
   
-  raty(document.querySelector('#easy-rating'), {
+  // 簡単さの評価
+  const easyRaty = new Raty(document.querySelector('#easy-rating'));
+  easyRaty.init({
     ...ratingConfig,
     score: <%= recipe_review&.easy_rate.to_f || 0 %>,
     scoreName: 'recipe_review[easy_rate]'

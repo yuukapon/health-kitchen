@@ -1,20 +1,14 @@
+// SortableJSライブラリをインポート
 import Sortable from 'sortablejs';
 
-// 両方のイベントをリッスンして、確実に初期化されるようにする
-const initializeSortable = () => {
+// Turbolinksでページが読み込まれた時に実行される処理を設定
+document.addEventListener('turbolinks:load', () => {
   const elements = document.querySelectorAll('.sortable-list');
   elements.forEach((element) => {
-    if (!element.dataset.sortableInitialized) {  // 二重初期化を防ぐ
-      new Sortable(element, {
-        handle: '.handle',
-        animation: 150,
-        ghostClass: 'sortable-ghost'
-      });
-      element.dataset.sortableInitialized = 'true';
-    }
+    new Sortable(element, {
+      handle: '.handle',
+      animation: 150,
+      ghostClass: 'sortable-ghost'
+    });
   });
-};
-
-// 通常のページロードとTurbolinksの両方に対応
-document.addEventListener('DOMContentLoaded', initializeSortable);
-document.addEventListener('turbolinks:load', initializeSortable);
+});

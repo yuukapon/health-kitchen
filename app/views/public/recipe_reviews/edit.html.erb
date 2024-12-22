@@ -1,0 +1,40 @@
+<%= render 'shared/error_messages', resource: @recipe_review %>
+
+<div class="container mt-4">
+  <!-- メインコンテンツ -->
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <!-- レシピ情報 -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light py-3">
+          <h5 class="mb-0 fw-bold text-center">レビュー編集</h5>
+        </div>
+        <div class="card-body">
+          <!-- レシピ概要 -->
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <%= image_tag @recipe.get_image(100,100), class: "rounded", style: "object-fit: cover;" %>
+            <div>
+              <h6 class="fw-bold mb-2"><%= @recipe.title %></h6>
+              <small class="text-muted">
+                <i class="fa-regular fa-calendar me-1"></i>
+                投稿日: <%= @recipe.created_at.strftime('%Y/%m/%d') %>
+              </small>
+            </div>
+          </div>
+          <!-- レビュー編集フォーム -->
+          <div class="border-top pt-4">
+            <%= render 'public/recipe_reviews/form', 
+                recipe: @recipe, 
+                recipe_review: @recipe_review, 
+                submit_text: "レビューを更新" %>
+          </div>
+        </div>
+      </div>
+      <!-- キャンセルボタン -->
+      <div class="text-center">
+        <%= link_to "レシピページに戻る", recipe_path(@recipe), 
+            class: "btn btn-outline-secondary px-4 mb-4" %>
+      </div>
+    </div>
+  </div>
+</div>

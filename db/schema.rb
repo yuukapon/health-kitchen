@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_08_081321) do
+ActiveRecord::Schema.define(version: 2024_12_19_045325) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -95,6 +95,19 @@ ActiveRecord::Schema.define(version: 2024_12_08_081321) do
     t.index ["position"], name: "index_recipe_ingredients_on_position"
   end
 
+  create_table "recipe_reviews", force: :cascade do |t|
+    t.float "healthy_rate", null: false
+    t.float "satisfaction_rate", null: false
+    t.float "easy_rate", null: false
+    t.text "comment"
+    t.integer "recipe_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["recipe_id"], name: "index_recipe_reviews_on_recipe_id"
+    t.index ["user_id"], name: "index_recipe_reviews_on_user_id"
+  end
+
   create_table "recipe_steps", force: :cascade do |t|
     t.integer "recipe_id", null: false
     t.text "description", null: false
@@ -135,5 +148,7 @@ ActiveRecord::Schema.define(version: 2024_12_08_081321) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "recipe_genres", "genres"
   add_foreign_key "recipe_genres", "recipes"
+  add_foreign_key "recipe_reviews", "recipes"
+  add_foreign_key "recipe_reviews", "users"
   add_foreign_key "recipes", "users"
 end

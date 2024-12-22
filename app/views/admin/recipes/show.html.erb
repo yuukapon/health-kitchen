@@ -1,5 +1,8 @@
+<!--/health-kitchen/app/views/admin/recipes/show.html.erb-->
+
 <%= render 'shared/recipe_details', 
   recipe: @recipe, 
-  recipe_comment: @recipe_comment, 
+  recipe_comment: nil,  # 管理者は投稿できないのでnil
+  recipe_review: nil,   # 管理者はレビューできないのでnil
   admin_view: true
 %>

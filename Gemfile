@@ -74,10 +74,14 @@ end
 #   # 他の production 環境用の gem を記載
 # end
 
-
 gem "net-smtp"
 gem "net-pop"
 gem "net-imap"
 
 # スライダー機能用
 gem 'acts_as_list'
+
+# デバッグ用
+group :development do
+  gem 'pry-rails'
+end

@@ -43,7 +43,17 @@
                 </li>
                 <li class="nav-item">
                   <%= link_to admin_recipes_path, class: 'nav-link hover-grow', style: 'color: #7F6000;' do %>
-                     <i class="fa-solid fa-book-open me-1"></i> レシピ管理
+                    <i class="fa-solid fa-book-open me-1"></i> レシピ管理
+                  <% end %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to admin_recipe_comments_path, class: 'nav-link hover-grow', style: 'color: #7F6000;' do %>
+                    <i class="fa-regular fa-comment me-1"></i> コメント管理
+                  <% end %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to admin_recipe_reviews_path, class: 'nav-link hover-grow', style: 'color: #7F6000;' do %>
+                    <i class="fa-solid fa-star me-1"></i> レビュー管理
                   <% end %>
                 </li>
                 <li class="nav-item">

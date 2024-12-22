@@ -7,22 +7,21 @@ import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
+import "jquery"
+import "../stylesheets/application"
+import "cocoon"
+import './sortable'
 
-import "jquery";
-//import "popper.js";
-//import "bootstrap";
-import "../stylesheets/application"; 
+// raty-jsのインポート
+import Raty from 'raty-js'
 
-// require('jquery')
-import "cocoon";
-
+// グローバルにratyを定義
+window.raty = function(elem,opt) {
+    let raty = new Raty(elem,opt)
+    raty.init();
+    return raty;
+}
 
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
-
-// import "@hotwired/stimulus"
-// import "../controllers"
-
-// スライダー機能用
-import './sortable'

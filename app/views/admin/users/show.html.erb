@@ -1,6 +1,8 @@
 <%= render 'shared/user_details', 
   user: @user, 
   recipes: @recipes, 
+  recipe: @recipe, 
+  recipe_review: @recipe_review,
   admin_view: true 
 %>
 
@@ -20,7 +22,7 @@
       <!-- レシピ一覧 -->
       <div class="recipe-list">
         <% if @recipes.present? %>
-          <%= render 'shared/recipe_cards', recipes: @recipes, admin_view: true %>
+          <%= render 'shared/recipe_cards', recipes: @recipes, recipe_review: @recipe_review, admin_view: true %>
         <% else %>
           <div class="text-center text-muted py-5">
             <p>まだレシピが投稿されていません</p>

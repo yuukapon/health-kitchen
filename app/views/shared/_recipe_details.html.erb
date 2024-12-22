@@ -16,7 +16,20 @@
                   <h2 class="fw-bold mb-3 text-break">
                     <%= recipe.title %>
                   </h2>
-                  
+                                    
+                  <!-- 平均評価 -->
+                  <div class="mb-3">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="average-rating" data-score="<%= recipe.average_rate %>"></div>
+                      <span class="text-muted">（<%= recipe.recipe_reviews.count %>件の評価）</span>
+                    </div>
+                    <div class="d-flex gap-4 mt-2">
+                      <small>ヘルシー度: <%= recipe.average_healthy_rate %></small>
+                      <small>満足感: <%= recipe.average_satisfaction_rate %></small>
+                      <small>簡単さ: <%= recipe.average_easy_rate %></small>
+                    </div>
+                  </div>
+
                   <!-- ユーザーアイコンと名前 -->
                   <div class="mb-3">
                     <%= link_to (admin_view ? admin_user_path(recipe.user.id) : user_path(recipe.user.id)), 
@@ -72,37 +85,37 @@
       <!-- いいねとコメント数 -->
       <div class="row my-4">
         <div class="col-12">
-          <div class="d-flex justify-content-center gap-2">
+          <div class="d-flex justify-content-center gap-3">
             <% if admin_view %>
               <!-- 管理者用（数の表示のみ） -->
-              <div class="btn border shadow-sm px-4">
-                <i class="fa-solid fa-heart me-1 text-danger"></i>
-                <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
-              </div>
+              <button class="btn border px-4 py-2 d-flex align-items-center">
+                <i class="fa-solid fa-heart me-2 text-danger"></i>
+                <span><%= recipe.recipe_favorites.count %></span>
+              </button>
             <% else %>
               <!-- ユーザー用（いいねボタン） -->
               <% if recipe.favorited_by?(current_user) %>
-                <%= form_with url: recipe_recipe_favorite_path(recipe), method: :delete, local: true do |f| %>
-                  <%= f.button type: :submit, class: "btn border shadow-sm px-4" do %>
-                    <i class="fa-solid fa-heart me-1 text-danger"></i>
-                    <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
+                <%= form_with url: recipe_recipe_favorite_path(recipe), method: :delete, local: true, class: "m-0 d-flex" do |f| %>
+                  <%= f.button type: :submit, class: "btn border px-4 py-2 d-flex align-items-center h-100" do %>
+                    <i class="fa-solid fa-heart me-2 text-danger"></i>
+                    <span><%= recipe.recipe_favorites.count %></span>
                   <% end %>
                 <% end %>
               <% else %>
-                <%= form_with url: recipe_recipe_favorite_path(recipe), method: :post, local: true do |f| %>
-                  <%= f.button type: :submit, class: "btn border shadow-sm px-4" do %>
-                    <i class="fa-regular fa-heart me-1 text-danger"></i>
-                    <span class="fw-medium"><%= recipe.recipe_favorites.count %></span>
+                <%= form_with url: recipe_recipe_favorite_path(recipe), method: :post, local: true, class: "m-0 d-flex" do |f| %>
+                  <%= f.button type: :submit, class: "btn border px-4 py-2 d-flex align-items-center h-100" do %>
+                    <i class="fa-regular fa-heart me-2 text-danger"></i>
+                    <span><%= recipe.recipe_favorites.count %></span>
                   <% end %>
                 <% end %>
               <% end %>
             <% end %>
 
             <!-- コメント数 -->
-            <div class="btn border shadow-sm px-4">
+            <button class="btn border px-4 py-2 d-flex align-items-center">
               <i class="fa-regular fa-comment me-2 text-primary"></i>
-              <span class="fw-medium"><%= recipe.recipe_comments.count %></span>
-            </div>
+              <span><%= recipe.recipe_comments.count %></span>
+            </button>
           </div>
         </div>
       </div>
@@ -220,16 +233,19 @@
                     <small class="text-muted m-2"><%= recipe_comment.created_at.strftime('%Y/%m/%d') %></small>
                   </div>
                   
-                  <p class="mb-2"><%= recipe_comment.comment %></p>
+                  <p class="mb-2">
+                    <%= recipe_comment.comment %>
+                  </p>
                   
                   <!-- コメント削除ボタン -->
                   <% if admin_view || recipe_comment.user == current_user %>
-                    <div class="text-end">
+                    <div class="text-end mt-3">
                       <%= link_to (admin_view ? admin_recipe_recipe_comment_path(recipe, recipe_comment) : recipe_recipe_comment_path(recipe, recipe_comment)), 
                           method: :delete, 
                           data: { confirm: "このコメントを削除してもよろしいですか？" },
-                          class: "btn btn-link text-danger p-2" do %>
-                        <i class="fa-solid fa-trash"></i>
+                          class: "btn btn-sm btn-outline-danger" do %>
+                        <i class="fa-solid fa-trash me-1"></i>
+                        削除
                       <% end %>
                     </div>
                   <% end %>
@@ -239,6 +255,41 @@
           </div>
         </div>
       </div>
+
+      <!-- レビューセクション -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
+              <h5 class="mb-0 fw-bold">レビュー <%= recipe.recipe_reviews.count %>件</h5>
+            </div>
+                        
+            <!-- レビュー投稿フォーム -->
+            <% unless admin_view || recipe.user == current_user %>
+              <div class="card-body border-bottom">
+                <% if current_user.recipe_reviews.exists?(recipe_id: recipe.id) %>
+                  <div class="alert alert-secondary">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    このレシピは既にレビュー済みです
+                  </div>
+                <% else %>
+                  <%= render 'public/recipe_reviews/form', 
+                        recipe: recipe,
+                        recipe_review: recipe_review,
+                        submit_text: "レビューする" %>
+                <% end %>
+              </div>
+            <% end %>
+
+            <!-- レビュー一覧 -->
+            <div class="card-body">
+              <%= render 'shared/recipe_review_list', recipe: recipe %>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<%= render 'shared/rating_initializer' %>

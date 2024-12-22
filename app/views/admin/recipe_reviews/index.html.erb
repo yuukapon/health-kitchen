@@ -1,0 +1,105 @@
+<div class="container py-5">
+  <div class="row justify-content-center mb-5">
+    <div class="col-12">
+      <h1 class="text-center mb-4">レビュー管理</h1>
+      
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th class="col-1 text-center">レビューID</th>
+                  <th class="col-3 text-start">評価内容</th>
+                  <th class="col-1 text-center">レシピ画像</th>
+                  <th class="col-1 text-center">レシピID</th>
+                  <th class="col-2 text-start">レシピ名</th>
+                  <th class="col-1 text-center">プロフィール</th>
+                  <th class="col-1 text-center">ユーザーID</th>
+                  <th class="col-1 text-center">ユーザー名</th>
+                  <th class="col-1 text-center">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @reviews.each do |review| %>
+                  <tr>
+                    <td class="text-center text-muted"><%= review.id %></td>
+                    <td>
+                      <div class="mb-2">
+                        <small class="text-muted me-2">ヘルシー度:</small>
+                        <span class="badge rounded-pill bg-light text-dark border">
+                          <i class="fa-solid fa-star text-warning me-1"></i>
+                          <%= review.healthy_rate %>
+                        </span>
+                      </div>
+                      <div class="mb-2">
+                        <small class="text-muted me-2">満足感:</small>
+                        <span class="badge rounded-pill bg-light text-dark border">
+                          <i class="fa-solid fa-star text-warning me-1"></i>
+                          <%= review.satisfaction_rate %>
+                        </span>
+                      </div>
+                      <div class="mb-2">
+                        <small class="text-muted me-2">簡単さ:</small>
+                        <span class="badge rounded-pill bg-light text-dark border">
+                          <i class="fa-solid fa-star text-warning me-1"></i>
+                          <%= review.easy_rate %>
+                        </span>
+                      </div>
+                      <% if review.comment.present? %>
+                        <small class="text-muted">コメント:</small><br>
+                        <%= review.comment %>
+                      <% end %>
+                    </td>
+                    
+                    <!-- レシピ情報 -->
+                    <td class="text-center">
+                      <%= link_to admin_recipe_path(review.recipe) do %>
+                        <%= image_tag review.recipe.get_image(80,80), class: "rounded img-fluid" %>
+                      <% end %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to review.recipe.id, admin_recipe_path(review.recipe), class: "text-decoration-none text-muted" %>
+                    </td>
+                    <td>
+                      <%= link_to review.recipe.title, admin_recipe_path(review.recipe), class: "text-decoration-none text-dark" %>
+                    </td>
+                    
+                    <!-- ユーザー情報 -->
+                    <td class="text-center">
+                      <%= link_to admin_user_path(review.user) do %>
+                        <%= image_tag review.user.get_profile_image(50,50), class: "rounded-circle img-fluid" %>
+                      <% end %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to review.user.id, admin_user_path(review.user), class: "text-decoration-none text-muted" %>
+                    </td>
+                    <td class="text-center">
+                      <%= link_to review.user.name, admin_user_path(review.user), class: "text-decoration-none text-dark" %>
+                    </td>
+                    
+                    <!-- 削除ボタン -->
+                    <td class="text-center">
+                      <%= link_to admin_recipe_recipe_review_path(review.recipe, review), 
+                          method: :delete,
+                          data: { confirm: "このレビューを削除してもよろしいですか？" },
+                          class: "btn btn-sm btn-outline-danger" do %>
+                        <i class="fa-solid fa-trash me-1"></i>
+                        削除
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ページネーション -->
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @reviews, class: 'pagination' %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,11 +10,9 @@ class Admin::RecipesController < ApplicationController
       .order(created_at: :desc)
       .page(params[:page])
   end
-  
 
   def show
     # set_recipeで@recipeが設定されるので、ここは空でOK
-    @recipe_comments = @recipe.recipe_comments  # コメント一覧を表示
   end
   
   def destroy

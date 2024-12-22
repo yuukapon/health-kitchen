@@ -1,15 +1,12 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const elements = document.querySelectorAll('.average-rating');
-  elements.forEach(element => {
-    raty(element, {
-      starOn: '<%= asset_path('star-on.png') %>',
-      starOff: '<%= asset_path('star-off.png') %>',
-      starHalf: '<%= asset_path('star-half.png') %>',
-      half: true,
-      readOnly: true,
-      score: element.dataset.score
-    });
+  raty(document.querySelector('.average-rating'), {
+    starOn: '/assets/star-on.png',
+    starOff: '/assets/star-off.png',
+    starHalf: '/assets/star-half.png',
+    half: true,
+    readOnly: true,
+    score: document.querySelector('.average-rating').dataset.score
   });
 });
 </script>

@@ -1,16 +1,14 @@
 <script>
-document.addEventListener('turbolinks:load', function() {
+document.addEventListener('DOMContentLoaded', function() {
   const elements = document.querySelectorAll('.average-rating');
   elements.forEach(element => {
-    const newRaty = new Raty(element);
-    newRaty.init({
+    raty(element, {
       starOn: '<%= asset_path('star-on.png') %>',
       starOff: '<%= asset_path('star-off.png') %>',
       starHalf: '<%= asset_path('star-half.png') %>',
       half: true,
       readOnly: true,
       score: element.dataset.score,
-      number: 5
     });
   });
 });

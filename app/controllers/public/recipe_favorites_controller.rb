@@ -1,4 +1,5 @@
 class Public::RecipeFavoritesController < ApplicationController
+  before_action :authenticate_user! # ログインユーザーのみ許可
     
   def create
     recipe = Recipe.find(params[:recipe_id]) 

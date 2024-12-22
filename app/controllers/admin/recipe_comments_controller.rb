@@ -5,12 +5,18 @@ class Admin::RecipeCommentsController < ApplicationController
   
   def index
     @comments = RecipeComment.includes(:recipe, :user).order(created_at: :desc).page(params[:page])
+    # order 並べ替え
+    # reated_at `ソートの基準
+    # :desc`降順（大きいものから小さいものの順）
+  end
+  
+  def show
   end
   
   def destroy
     recipe = @comment.recipe  # リダイレクト用にrecipeを保存
     @comment.destroy
-    redirect_to admin_recipe_path(recipe), notice: "コメントを削除しました。"
+    redirect_to admin_recipe_comments_path, notice: "コメントを削除しました。"
   end
 
   private

@@ -10,7 +10,7 @@ class Admin::RecipeReviewsController < ApplicationController
   def destroy
     recipe = @review.recipe  # リダイレクト用にrecipeを保存
     @review.destroy
-    redirect_to admin_recipe_path(recipe), notice: 'レビューを削除しました'
+    redirect_to admin_recipe_reviews_path, notice: 'レビューを削除しました'
   end
 
   private

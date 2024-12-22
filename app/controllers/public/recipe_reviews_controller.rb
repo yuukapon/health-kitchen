@@ -3,7 +3,7 @@ class Public::RecipeReviewsController < ApplicationController
   before_action :set_recipe
   before_action :set_recipe_review, only: [:edit, :update, :destroy]
   before_action :ensure_correct_user, only: [:edit, :update, :destroy]
-    
+      
   def create
     @recipe_review = @recipe.recipe_reviews.build(recipe_review_params)
     @recipe_review.user = current_user
@@ -11,16 +11,12 @@ class Public::RecipeReviewsController < ApplicationController
     if @recipe_review.save
       redirect_to recipe_path(@recipe), notice: 'レビューを投稿しました'
     else
-      @recipe_comment = RecipeComment.new
-      
-      # エラーメッセージをカスタマイズ
-      if @recipe_review.errors[:user_id].any?
-        flash.now[:alert] = 'このレシピは既にレビュー済みです'
-      else
-        flash.now[:alert] = 'すべての評価を入力してください'
-      end
-      
-      render 'public/recipes/show', status: :unprocessable_entity
+      flash[:alert] = if @recipe_review.errors[:user_id].any?
+                       'このレシピは既にレビュー済みです'
+                     else
+                       'すべての評価を入力してください'
+                     end
+     redirect_to recipe_path(@recipe), alert: "レビューの投稿に失敗しました。"
     end
   end
 

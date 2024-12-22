@@ -10,7 +10,6 @@ class Admin::RecipesController < ApplicationController
       .order(created_at: :desc)
       .page(params[:page])
   end
-  
 
   def show
     # set_recipeで@recipeが設定されるので、ここは空でOK

@@ -1,21 +1,5 @@
-<!-- エラーメッセージ -->
-<% if review = (recipe_review || RecipeReview.new) %>
-  <% if review.errors.any? %>
-    <div class="alert alert-danger">
-      <h5 class="alert-heading mb-3">
-        <i class="fa-solid fa-exclamation-circle me-2"></i>
-        <%= review.errors.count %>件のエラーが発生しました
-      </h5>
-      <ul class="mb-0 ps-4">
-        <% review.errors.full_messages.each do |message| %>
-          <li class="mb-1"><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-<% end %>
+<%= form_with model: [recipe, recipe_review], local: true do |f| %>
 
-<%= form_with model: [recipe, recipe_review || RecipeReview.new], local: true do |f| %>
   <div class="review-ratings mb-3">
     <div class="row g-3">
       <div class="col-md-4">

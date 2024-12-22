@@ -1,5 +1,5 @@
 class Public::UsersController < ApplicationController
-  before_action :authenticate_user! # Deviseの認証確認を追加
+  before_action :authenticate_user! # ログインユーザーのみ許可
   before_action :set_user, only: [:show, :edit, :update, :withdraw]
   before_action :ensure_correct_user, only: [:edit, :update, :withdraw]
   
@@ -13,8 +13,6 @@ class Public::UsersController < ApplicationController
                  .includes(:recipe_ingredients, :recipe_favorites)
                  .order(created_at: :desc)
                  .page(params[:page])
-                    
-                    
   end
   
   def edit

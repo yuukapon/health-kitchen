@@ -22,10 +22,10 @@ class Public::RecipesController < ApplicationController
       @recipe.recipe_genres.build if @recipe.recipe_genres.empty?
       
       flash.now[:error] = "入力内容に誤りがあります。"
-      render :new, status: :unprocessable_entity
+      render :new
     end
   end
-
+  
   def index
     @recipe = Recipe.new
     @q = Recipe.ransack(params[:q])
@@ -37,7 +37,7 @@ class Public::RecipesController < ApplicationController
 
   def show
     @recipe_comment = RecipeComment.new
-    @recipe_ingredient = RecipeIngredient.new
+    @recipe_review = RecipeReview.new
   end
 
   def edit
@@ -49,13 +49,44 @@ class Public::RecipesController < ApplicationController
       redirect_to recipe_path(@recipe)
     else
       flash.now[:error] = "レシピの更新に失敗しました。"
-      render :edit, status: :unprocessable_entity
+      render :edit
     end
   end
+
 
   def destroy
     @recipe.destroy
     flash[:success] = "レシピを削除しました。"
     redirect_to recipes_path
+  end
+
+  private
+
+  def set_recipe
+    @recipe = Recipe.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = "レシピが見つかりませんでした。"
+    redirect_to recipes_path
+  end
+
+  def authorize_recipe
+    unless @recipe.user == current_user
+      flash[:error] = "このアクションは許可されていません。"
+      redirect_to recipes_path
+    end
+  end
+
+  def recipe_params
+    params.require(:recipe).permit(
+      :title,
+      :description,
+      :people_count,
+      :cook_time,
+      :is_active,
+      :image,
+      recipe_ingredients_attributes: [:id, :ingredient, :quantity, :_destroy],
+      recipe_steps_attributes: [:id, :description, :step_image, :_destroy],
+      recipe_genres_attributes: [:id, :genre_id, :_destroy] 
+    )
   end
 end

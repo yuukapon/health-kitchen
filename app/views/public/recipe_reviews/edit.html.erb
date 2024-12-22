@@ -1,17 +1,4 @@
-  <!-- エラーメッセージ -->
-  <% if @recipe_review.errors.any? %>
-    <div class="alert alert-danger">
-      <h5 class="alert-heading mb-3">
-        <i class="fa-solid fa-exclamation-circle me-2"></i>
-        <%= @recipe_review.errors.count %>件のエラーが発生しました
-      </h5>
-      <ul class="mb-0 ps-4">
-        <% @recipe_review.errors.full_messages.each do |message| %>
-          <li class="mb-1"><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= render 'shared/error_messages', resource: @recipe_review %>
 
 <div class="container mt-4">
   <!-- メインコンテンツ -->
@@ -34,20 +21,19 @@
               </small>
             </div>
           </div>
-
           <!-- レビュー編集フォーム -->
           <div class="border-top pt-4">
-           <%= render 'public/recipe_reviews/form', 
+            <%= render 'public/recipe_reviews/form', 
                 recipe: @recipe, 
                 recipe_review: @recipe_review, 
                 submit_text: "レビューを更新" %>
+          </div>
         </div>
       </div>
-
       <!-- キャンセルボタン -->
       <div class="text-center">
         <%= link_to "レシピページに戻る", recipe_path(@recipe), 
-            class: "btn btn-outline-secondary px-4" %>
+            class: "btn btn-outline-secondary px-4 mb-4" %>
       </div>
     </div>
   </div>

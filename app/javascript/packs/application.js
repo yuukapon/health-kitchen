@@ -22,6 +22,13 @@ window.raty = function(elem,opt) {
     return raty;
 }
 
+// Turbolinksロード時に星評価を再初期化
+document.addEventListener('turbolinks:load', () => {
+    const event = document.createEvent('Event');
+    event.initEvent('DOMContentLoaded', true, true);
+    document.dispatchEvent(event);
+});
+
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()

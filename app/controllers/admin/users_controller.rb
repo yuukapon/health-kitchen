@@ -21,7 +21,7 @@ class Admin::UsersController < ApplicationController
     else
       flash[:alert] = "退会処理に失敗しました。"
     end
-    redirect_to admin_dashboards_path
+     redirect_to admin_root_path
   end
   
   private
@@ -30,6 +30,6 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "ユーザーが見つかりません。"
-    redirect_to admin_dashboards_path
+    redirect_to  admin_root_path
   end
 end

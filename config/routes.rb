@@ -12,8 +12,7 @@ Rails.application.routes.draw do
   
   # 管理者用
   namespace :admin do
-    root 'dashboards#index'  
-    get 'dashboards', to: 'dashboards#index'
+    root 'users#index'
     resources :users, only: [:show, :index, :update]
     resources :genres, only: [:index, :create, :destroy, :edit, :update] 
     resources :recipe_comments, only: [:index]     # 全コメントの一覧用
